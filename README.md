@@ -1,2 +1,2 @@
 # kittycade
-Kittycade
+Kittycade arcade game!

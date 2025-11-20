@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kittycade</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="ui">
+            <div id="score">Score: 0</div>
+            <div id="level">Level: 1</div>
+            <div id="lives">Lives: 🐱🐱🐱</div>
+            <div id="controls">
+                <button id="muteBtn">🔊 Sound</button>
+                <button id="pauseBtn">⏸ Pause</button>
+            </div>
+        </div>
+        <canvas id="gameCanvas" width="600" height="600"></canvas>
+        
+        <div id="startScreen">
+            <h1>🐱 Kittycade</h1>
+            <div class="instructions">
+                <p><strong>Get food and catch the mouse to grow.<br>Use the litter box to shrink.</strong></p>
+                <p id="controlText"></p>
+            </div>
+            <div class="legend">
+                <div class="legend-item">🐟</div>
+                <div class="legend-text">Food (100 pts) - Grow</div>
+                <div class="legend-item" id="litterBoxLegendItem"></div>
+                <div class="legend-text">Litter Box (100 pts) - Shrink (3 Segments)</div>
+                <div class="legend-item">🐀</div>
+                <div class="legend-text">Mischievous Mouse (500 pts) - Grow</div>
+                <canvas class="yarn-ball-legend legend-item" id="yarnLegend" width="40" height="40"></canvas>
+                <div class="legend-text">Yarn Ball (300 pts) - Score Bonus</div>
+                <div class="legend-item">🛏️</div>
+                <div class="legend-text">Cat Bed (200 pts) - Score Bonus & Nap</div>
+                <div class="legend-item">🌿</div>
+                <div class="legend-text">Catnip (1000 pts) - Score & Turbo Speed!</div>
+            </div>
+            <button id="startBtn">Start Game</button>
+        </div>
+        
+        <div id="gameOverScreen" class="hidden">
+            <h1>Game Over!</h1>
+            <p id="finalScore"></p>
+            <p id="highScoreDisplay"></p>
+            <button id="restartBtn">Play Again</button>
+        </div>
+        
+        <div id="pauseOverlay" class="hidden">PAUSED</div>
+    </div>
+    
+    <script src="constants.js"></script>
+    <script src="state.js"></script>
+    <script src="renderer.js"></script>
+    <script src="logic.js"></script>
+    <script src="input.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

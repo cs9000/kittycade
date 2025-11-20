@@ -1,0 +1,128 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+#gameContainer {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    max-width: 600px;
+    width: 100%;
+}
+#ui {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+#score, #lives, #level {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+#controls { display: flex; gap: 10px; }
+button {
+    padding: 8px 16px;
+    font-size: 14px;
+    border: none;
+    border-radius: 8px;
+    background: #667eea;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+button:hover { background: #5568d3; }
+#gameCanvas {
+    border: 3px solid #333;
+    border-radius: 10px;
+    display: block;
+    margin: 0 auto;
+    background: #f0f0f0;
+    max-width: 100%;
+    height: auto;
+}
+#startScreen, #gameOverScreen {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    text-align: center;
+    max-width: 450px;
+    width: 90%;
+    z-index: 100;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+#startScreen h1, #gameOverScreen h1 {
+    color: #667eea;
+    margin-bottom: 20px;
+    font-size: 32px;
+}
+#startScreen p, #gameOverScreen p {
+    margin: 10px 0;
+    color: #555;
+    line-height: 1.6;
+}
+.instructions {
+    background: #f8f9ff;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+.legend {
+    background: #f8f9ff;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 20px 0;
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 10px 15px;
+    align-items: center;
+    text-align: left;
+}
+.legend-item {
+    font-size: 24px;
+    text-align: center;
+}
+.yarn-ball-legend, .litter-box-legend { 
+    width: 40px; 
+    height: 40px; 
+}
+.legend-text {
+    color: #555;
+    font-weight: bold;
+    font-size: 14px;
+}
+.hidden { display: none; }
+#pauseOverlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 30px 60px;
+    border-radius: 15px;
+    font-size: 32px;
+    font-weight: bold;
+    z-index: 50;
+}
+@media (max-width: 600px) {
+    #gameContainer { padding: 15px; }
+    #ui { font-size: 14px; }
+    button { padding: 6px 12px; font-size: 12px; }
+}
