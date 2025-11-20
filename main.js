@@ -180,7 +180,7 @@ window.activateTurbo = function() {
     logicLoopId = setInterval(update, game.speed); 
     startMouseLogic(); 
     
-    game.feedbackMessage = `🌿 CATNIP TURBO BOOST! (5s) 🌿`;
+    game.feedbackMessage = `TURBO BOOST!`;
     game.feedbackStartTime = performance.now(); 
     featherTimerId = setTimeout(window.restoreNormalSpeed, 5000); 
 }
