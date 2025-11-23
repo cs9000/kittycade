@@ -11,6 +11,7 @@ let game = {
     paused: false, userPaused: false, systemPaused: false,
     gameOver: false, muted: false, animating: false, started: false,
     lastFrameTime: 0, lag: 0,
+    lastRenderTime: 0,
     nextHeadPos: null, feedbackMessage: null, feedbackStartTime: 0, 
     zHead: null, zStream: [], zDirection: -1, shouldAnimateSleep: false,
     savedSnakeState: null,
@@ -47,6 +48,7 @@ function resetGameState() {
     
     // Reset timers/visuals
     game.lastFrameTime = 0;
+    game.lastRenderTime = 0;
     game.lag = 0;
     game.nextHeadPos = null;
     game.feedbackMessage = null;

@@ -43,23 +43,31 @@ function gameLoop(currentTime) {
         return;
     }
 
-        if (!game.paused) {
-            const deltaTime = currentTime - game.lastFrameTime;
-            game.lastFrameTime = currentTime;
-            game.lag += deltaTime;
-    
-            while (game.lag >= game.speed) {
-                game.snake.forEach(seg => { seg.px = seg.x; seg.py = seg.y; });
-                updateGameLogic();
-                game.lag -= game.speed;
-            }
-        } else { // If paused, just update lastFrameTime to prevent huge lag accumulation on unpause
-            game.lastFrameTime = currentTime;
+    // Calculate deltaTime for logic updates
+    let logicDeltaTime = 0;
+    if (!game.paused) {
+        logicDeltaTime = currentTime - game.lastFrameTime;
+        game.lastFrameTime = currentTime; // Update lastFrameTime after using it for logic
+        game.lag += logicDeltaTime;
+
+        while (game.lag >= game.speed) {
+            game.snake.forEach(seg => { seg.px = seg.x; seg.py = seg.y; });
+            updateGameLogic();
+            game.lag -= game.speed;
         }
-    
-        // Always render, even when paused (for feedback messages, pause overlay, animations)
-        const interpolationFactor = game.lag / game.speed;
-        draw(interpolationFactor);    animationFrameId = requestAnimationFrame(gameLoop);
+    } else {
+        // If paused, just update lastFrameTime to prevent huge lag accumulation on unpause
+        game.lastFrameTime = currentTime;
+    }
+
+    // Calculate deltaTime for rendering updates (always happens, even if paused)
+    const renderDeltaTime = (currentTime - game.lastRenderTime) / 1000; // Convert to seconds
+    game.lastRenderTime = currentTime; // Update lastRenderTime
+
+    // Always render, even when paused (for feedback messages, pause overlay, animations)
+    const interpolationFactor = game.lag / game.speed;
+    draw(interpolationFactor, renderDeltaTime);
+    animationFrameId = requestAnimationFrame(gameLoop);
 }
 
 function updatePauseState() {
@@ -150,6 +158,8 @@ window.initGame = function() {
     game.speed = 200;
     game.baseSpeed = 200;
     game.started = true;
+    game.lastFrameTime = performance.now(); // Initialize for logic updates
+    game.lastRenderTime = performance.now(); // Initialize for rendering updates
     spawnFood();
     updateUI();
     draw();

@@ -91,7 +91,7 @@ function drawLitterBoxGraphic(ctx, X, Y, W, H, isLegend) {
     ctx.stroke();
 }
 
-function draw(interpolationFactor) {
+function draw(interpolationFactor, renderDeltaTime) {
     ctx.fillStyle = '#f0f0f0';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
@@ -181,11 +181,216 @@ function draw(interpolationFactor) {
     });
 
     if (game.animating && game.zHead) {
-        drawSleepAnimation(ctx, (performance.now() - game.lastFrameTime) / 1000); // Need to pass deltaTime correctly here
+        drawSleepAnimation(ctx, renderDeltaTime);
     }
 
     if (game.feedbackMessage) {
         drawFeedback(ctx, performance.now());
+    }
+}
+
+function drawCatHead(ctx, centerX, centerY, cellSize) {
+    const faceRadius = (cellSize / 2) - 4;
+    const catColor = game.isTurbo ? '#66ffff' : '#ff8c42'; 
+    ctx.fillStyle = catColor;
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, faceRadius, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = catColor;
+    if (game.direction.y === -1) { 
+        drawEar(ctx, centerX, centerY, faceRadius, -1, -1);
+        drawEar(ctx, centerX, centerY, faceRadius, 1, -1);
+    } else if (game.direction.y === 1) { 
+        drawEar(ctx, centerX, centerY, faceRadius, -1, 1);
+        drawEar(ctx, centerX, centerY, faceRadius, 1, 1);
+    } else if (game.direction.x === -1) { 
+        drawEar(ctx, centerX, centerY, faceRadius, -1, 1, true);
+        drawEar(ctx, centerX, centerY, faceRadius, -1, -1, true);
+    } else { 
+        drawEar(ctx, centerX, centerY, faceRadius, 1, 1, true);
+        drawEar(ctx, centerX, centerY, faceRadius, 1, -1, true);
+    }
+
+    let eyeOffsetX = 0;
+    let eyeOffsetY = -faceRadius * 0.2;
+    if (game.direction.x === 1) { eyeOffsetX = faceRadius * 0.2; eyeOffsetY = 0; } 
+    else if (game.direction.x === -1) { eyeOffsetX = -faceRadius * 0.2; eyeOffsetY = 0; } 
+    else if (game.direction.y === 1) { eyeOffsetY = faceRadius * 0.2; }
+    
+    ctx.fillStyle = '#4ade80';
+    ctx.beginPath();
+    if (game.direction.y !== 0) {
+        ctx.arc(centerX - faceRadius * 0.35, centerY + eyeOffsetY, 6, 0, Math.PI * 2);
+        ctx.arc(centerX + faceRadius * 0.35, centerY + eyeOffsetY, 6, 0, Math.PI * 2);
+    } else {
+        ctx.arc(centerX + eyeOffsetX, centerY - faceRadius * 0.25, 6, 0, Math.PI * 2);
+        ctx.arc(centerX + eyeOffsetX, centerY + faceRadius * 0.25, 6, 0, Math.PI * 2);
+    }
+    ctx.fill();
+    
+    ctx.fillStyle = 'black';
+    if (game.direction.y !== 0) {
+        ctx.fillRect(centerX - faceRadius * 0.35 - 1, centerY + eyeOffsetY - 5, 2, 10);
+        ctx.fillRect(centerX + faceRadius * 0.35 - 1, centerY + eyeOffsetY - 5, 2, 10);
+    } else {
+        ctx.fillRect(centerX + eyeOffsetX - 1, centerY - faceRadius * 0.25 - 5, 2, 10);
+        ctx.fillRect(centerX + eyeOffsetX - 1, centerY + faceRadius * 0.25 - 5, 2, 10);
+    }
+    
+    ctx.fillStyle = '#ffb3d9';
+    ctx.beginPath();
+    if (game.direction.y === -1) {
+        ctx.moveTo(centerX, centerY - faceRadius * 0.05);
+        ctx.lineTo(centerX - 3, centerY + faceRadius * 0.1);
+        ctx.lineTo(centerX + 3, centerY + faceRadius * 0.1);
+    } else if (game.direction.y === 1) {
+        ctx.moveTo(centerX, centerY + faceRadius * 0.4);
+        ctx.lineTo(centerX - 3, centerY + faceRadius * 0.25);
+        ctx.lineTo(centerX + 3, centerY + faceRadius * 0.25);
+    } else if (game.direction.x === -1) {
+        ctx.moveTo(centerX - faceRadius * 0.05, centerY);
+        ctx.lineTo(centerX + faceRadius * 0.1, centerY - 3);
+        ctx.lineTo(centerX + faceRadius * 0.1, centerY + 3);
+    } else {
+        ctx.moveTo(centerX + faceRadius * 0.4, centerY);
+        ctx.lineTo(centerX + faceRadius * 0.25, centerY - 3);
+        ctx.lineTo(centerX + faceRadius * 0.25, centerY + 3);
+    }
+    ctx.closePath();
+    ctx.fill();
+    
+    ctx.strokeStyle = '#333';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    if (game.direction.y !== 0) {
+         ctx.moveTo(centerX - faceRadius * 0.6, centerY - 5); ctx.lineTo(centerX - faceRadius * 1.5, centerY - 8);
+         ctx.moveTo(centerX - faceRadius * 0.6, centerY); ctx.lineTo(centerX - faceRadius * 1.5, centerY);
+         ctx.moveTo(centerX + faceRadius * 0.6, centerY - 5); ctx.lineTo(centerX + faceRadius * 1.5, centerY - 8);
+         ctx.moveTo(centerX + faceRadius * 0.6, centerY); ctx.lineTo(centerX + faceRadius * 1.5, centerY);
+    } else {
+         ctx.moveTo(centerX - 5, centerY - faceRadius * 0.6); ctx.lineTo(centerX - 8, centerY - faceRadius * 1.5);
+         ctx.moveTo(centerX, centerY - faceRadius * 0.6); ctx.lineTo(centerX, centerY - faceRadius * 1.5);
+         ctx.moveTo(centerX + 5, centerY - faceRadius * 0.6); ctx.lineTo(centerX + 8, centerY - faceRadius * 1.5);
+         ctx.moveTo(centerX, centerY + faceRadius * 0.6); ctx.lineTo(centerX, centerY + faceRadius * 1.5);
+    }
+    ctx.stroke();
+}
+
+function drawEar(ctx, cx, cy, r, sideX, sideY, isHorizontal) {
+    ctx.fillStyle = game.isTurbo ? '#66ffff' : '#ff8c42'; 
+    ctx.beginPath();
+    if(!isHorizontal) {
+        ctx.moveTo(cx + (sideX * r * 0.6), cy + (sideY * r * 0.4));
+        ctx.lineTo(cx + (sideX * r * 0.8), cy + (sideY * r * 1.3));
+        ctx.lineTo(cx + (sideX * r * 0.3), cy + (sideY * r * 0.7));
+    } else {
+        ctx.moveTo(cx + (sideX * r * 0.4), cy + (sideY * r * 0.6));
+        ctx.lineTo(cx + (sideX * r * 1.3), cy + (sideY * r * 0.8));
+        ctx.lineTo(cx + (sideX * r * 0.7), cy + (sideY * r * 0.3));
+    }
+    ctx.closePath();
+    ctx.fill();
+    
+    ctx.fillStyle = '#ffb3d9';
+    ctx.beginPath();
+    if(!isHorizontal) {
+        ctx.moveTo(cx + (sideX * r * 0.55), cy + (sideY * r * 0.5));
+        ctx.lineTo(cx + (sideX * r * 0.7), cy + (sideY * r * 1.1));
+        ctx.lineTo(cx + (sideX * r * 0.4), cy + (sideY * r * 0.7));
+    } else {
+        ctx.moveTo(cx + (sideX * r * 0.5), cy + (sideY * r * 0.55));
+        ctx.lineTo(cx + (sideX * r * 1.1), cy + (sideY * r * 0.7));
+        ctx.lineTo(cx + (sideX * r * 0.7), cy + (sideY * r * 0.4));
+    }
+    ctx.closePath();
+    ctx.fill();
+}
+
+function drawSleepAnimation(ctx, renderDeltaTime) {
+    if (!game.paused) {
+        const Z_SPEED = 40; 
+        const MAX_Z_OFFSET = 80; 
+        const dist = Z_SPEED * renderDeltaTime * game.zDirection;
+        
+        game.zStream.forEach(z => {
+            z.offsetY += dist;
+            const distance = Math.abs(z.offsetY);
+            const progress = Math.min(1, distance / MAX_Z_OFFSET);
+            z.offsetX = z.startOffsetX * (1 - progress); 
+            z.alpha = 1 - progress; 
+        });
+
+        game.zStream = game.zStream.filter(z => Math.abs(z.offsetY) < MAX_Z_OFFSET);
+    }
+
+    const head = game.zHead; 
+    const cx = (head.x + 0.5) * CELL_SIZE;
+    const cy = (head.y + 0.5) * CELL_SIZE; 
+    
+    ctx.font = 'bold 24px Arial';
+    game.zStream.forEach(z => {
+        ctx.globalAlpha = z.alpha; 
+        ctx.fillStyle = '#667eea';
+        ctx.fillText('Z', cx + z.offsetX, cy + z.offsetY); 
+    });
+    ctx.globalAlpha = 1; 
+}
+
+function drawFeedback(ctx, timestamp) {
+    const timeSinceFeedbackStart = timestamp - game.feedbackStartTime;
+    const isCollision = game.feedbackMessage.includes("hit the wall") || game.feedbackMessage.includes("ran into yourself") || game.feedbackMessage.includes("Fatal");
+    const isTurboOrRestore = game.feedbackMessage.includes("TURBO BOOST") || game.feedbackMessage.includes("Speed Restored");
+    
+    if (!isTurboOrRestore) {
+        if (isCollision && timeSinceFeedbackStart < 100) { 
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)'; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        } else {
+            ctx.fillStyle = 'rgba(0,0,0,0.6)'; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+    }
+
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 48px Arial'; 
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+    ctx.shadowBlur = 8;
+    ctx.shadowOffsetX = 4;
+    ctx.shadowOffsetY = 4;
+
+    ctx.fillText(game.feedbackMessage, canvas.width / 2, canvas.height / 2);
+    
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+}
+
+function drawLegendItems() {
+    const litterItem = document.getElementById('litterBoxLegendItem');
+    if (litterItem) {
+        const lCanv = document.createElement('canvas');
+        lCanv.width = 40; lCanv.height = 40;
+        const lCtx = lCanv.getContext('2d'); 
+        lCtx.fillStyle = '#f8f9ff'; lCtx.fillRect(0,0,40,40);
+        litterItem.innerHTML = ''; litterItem.appendChild(lCanv);
+        drawLitterBoxGraphic(lCtx, 0, 0, 40, 40, true);
+    }
+
+    const yarnLegend = document.getElementById('yarnLegend');
+    if (yarnLegend) {
+        const ctx = yarnLegend.getContext('2d');
+        const cx = 20, cy = 20, r = 12;
+        ctx.fillStyle = '#e74c3c'; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.fill();
+        ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(cx-r*0.7, cy-r*0.7); ctx.lineTo(cx+r*0.7, cy+r*0.7);
+        ctx.moveTo(cx-r*0.7, cy+r*0.7); ctx.lineTo(cx+r*0.7, cy-r*0.7);
+        ctx.stroke();
     }
 }
 
@@ -307,11 +512,11 @@ function drawEar(ctx, cx, cy, r, sideX, sideY, isHorizontal) {
     ctx.fill();
 }
 
-function drawSleepAnimation(ctx, deltaTime) {
+function drawSleepAnimation(ctx, renderDeltaTime) {
     if (!game.paused) {
         const Z_SPEED = 40; 
         const MAX_Z_OFFSET = 80; 
-        const dist = Z_SPEED * deltaTime * game.zDirection;
+        const dist = Z_SPEED * renderDeltaTime * game.zDirection;
         
         game.zStream.forEach(z => {
             z.offsetY += dist;
