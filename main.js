@@ -16,12 +16,6 @@ let turboCountdown = 0;
 let turboCountdownStart = 0;
 
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-document.getElementById('controlText').textContent = isTouchDevice 
-    ? 'Swipe to change direction' 
-    : 'Use Arrow Keys or WASD to move';
-
-createLitterTexture();
-drawLegendItems();
 
 function stopTimedIntervals() {
     if (mouseLogicId) { clearInterval(mouseLogicId); mouseLogicId = null; }
@@ -159,6 +153,8 @@ window.initGame = function() {
     spawnFood();
     updateUI();
     draw();
+    createLitterTexture(); // Initialize litter texture here
+    drawLegendItems();    // Draw legend items after canvas and ctx are ready
     showReady();
 }
 
@@ -237,11 +233,14 @@ window.loseLife = function(msg) {
         };
     }
     
-                    feedbackCountdown = 1500;
+                                            feedbackCountdown = 1500;
     
-                    feedbackCountdownStart = performance.now();
+                                            feedbackCountdownStart = performance.now();
     
-                    startFeedbackCountdown(feedbackCountdown);}
+                                            startFeedbackCountdown(feedbackCountdown);
+    
+                                            updateUI(); // Update UI after life is lost
+} // Added missing closing brace
 
 function endGame() {
     game.gameOver = true;
@@ -354,4 +353,8 @@ document.getElementById('muteBtn').addEventListener('click', () => {
     document.getElementById('muteBtn').textContent = game.muted ? '🔇 Muted' : '🔊 Sound';
 });
 
-initInput();
+    initInput();
+
+// Ensure legend items are drawn when the page initially loads
+createLitterTexture();
+drawLegendItems();

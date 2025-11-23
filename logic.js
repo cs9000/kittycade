@@ -218,4 +218,5 @@ function updateGameLogic() {
 
     game.nextHeadPos = null; 
     window.checkLevelUp();
+    updateUI(); // Update UI after game logic, including score changes
 }
