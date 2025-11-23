@@ -57,11 +57,11 @@ button:hover { background: #5568d3; }
     left: 50%;
     transform: translate(-50%, -50%);
     background: white;
-    padding: 40px;
+    padding: 20px;
     border-radius: 20px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.3);
     text-align: center;
-    max-width: 450px;
+    max-width: 400px;
     width: 90%;
     z-index: 100;
     max-height: 90vh;
@@ -69,7 +69,7 @@ button:hover { background: #5568d3; }
 }
 #startScreen h1, #gameOverScreen h1 {
     color: #667eea;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     font-size: 32px;
 }
 #startScreen p, #gameOverScreen p {
@@ -90,7 +90,7 @@ button:hover { background: #5568d3; }
     margin: 20px 0;
     display: grid;
     grid-template-columns: 40px 1fr;
-    gap: 10px 15px;
+    gap: 8px 12px;
     align-items: center;
     text-align: left;
 }
