@@ -150,7 +150,8 @@ window.checkLevelUp = function() {
     if (game.score >= threshold) {
         game.level++;
         game.baseSpeed = Math.max(50, 200 - (game.level - 1) * 15);
-        if (!game.isTurbo) game.speed = game.baseSpeed;
+        game.speed = game.baseSpeed;
+        if (game.isTurbo) game.isTurbo = false;
         
         stopGameLoops();
         game.paused = true;
