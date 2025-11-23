@@ -8,13 +8,15 @@ let game = {
     highScore: localStorage.getItem('catSnakeHighScore') || 0,
     lives: 3, level: 1, foodCount: 0,
     speed: 200, 
-    paused: false, gameOver: false, muted: false, animating: false, started: false,
-    lastUpdateTimestamp: 0, lastDrawTimestamp: 0,   
+    paused: false, userPaused: false, systemPaused: false,
+    gameOver: false, muted: false, animating: false, started: false,
+    lastFrameTime: 0, lag: 0,
     nextHeadPos: null, feedbackMessage: null, feedbackStartTime: 0, 
     zHead: null, zStream: [], zDirection: -1, shouldAnimateSleep: false,
+    savedSnakeState: null,
     mouseLastLogicTime: 0,
     baseSpeed: 200, 
-    isTurbo: false
+    isTurbo: false,
 };
 
 function resetGameState() {
@@ -37,13 +39,15 @@ function resetGameState() {
     
     // Reset flags
     game.paused = false;
+    game.userPaused = false;
+    game.systemPaused = false;
     game.gameOver = false;
     game.animating = false;
     game.started = false; // Logic loop waits for "Ready"
     
     // Reset timers/visuals
-    game.lastUpdateTimestamp = 0;
-    game.lastDrawTimestamp = 0;
+    game.lastFrameTime = 0;
+    game.lag = 0;
     game.nextHeadPos = null;
     game.feedbackMessage = null;
     game.feedbackStartTime = 0;

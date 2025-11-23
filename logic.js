@@ -216,7 +216,6 @@ function updateGameLogic() {
         game.shouldAnimateSleep = false;
     }
 
-    game.lastUpdateTimestamp = performance.now();
     game.nextHeadPos = null; 
     window.checkLevelUp();
 }

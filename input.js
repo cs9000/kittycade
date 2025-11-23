@@ -17,7 +17,7 @@ function initInput() {
         }
         
         if (e.key === ' ' || e.key.toLowerCase() === 'p') {
-            if (game.started && !game.gameOver && !game.animating && !game.feedbackMessage) { 
+            if (game.started && !game.gameOver) { 
                 window.togglePause();
             }
             e.preventDefault();

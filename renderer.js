@@ -91,13 +91,7 @@ function drawLitterBoxGraphic(ctx, X, Y, W, H, isLegend) {
     ctx.stroke();
 }
 
-function draw(timestamp = performance.now()) {
-    const deltaTime = (timestamp - game.lastDrawTimestamp) / 1000; 
-    game.lastDrawTimestamp = timestamp;
-
-    const timeSinceUpdate = timestamp - game.lastUpdateTimestamp; 
-    const interpolationFactor = Math.min(1, timeSinceUpdate / game.speed);
-
+function draw(interpolationFactor) {
     ctx.fillStyle = '#f0f0f0';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
@@ -155,7 +149,7 @@ function draw(timestamp = performance.now()) {
 
     if (game.mouse) {
         const mouseMovementPeriod = 500; 
-        const timeSinceMouseMove = timestamp - game.mouse.lastMoveTimestamp;
+        const timeSinceMouseMove = performance.now() - game.mouse.lastMoveTimestamp;
         const mouseInterpolationFactor = Math.min(1, timeSinceMouseMove / mouseMovementPeriod); 
         
         const currentX = game.mouse.px + (game.mouse.x - game.mouse.px) * mouseInterpolationFactor;
@@ -187,11 +181,11 @@ function draw(timestamp = performance.now()) {
     });
 
     if (game.animating && game.zHead) {
-        drawSleepAnimation(ctx, deltaTime);
+        drawSleepAnimation(ctx, (performance.now() - game.lastFrameTime) / 1000); // Need to pass deltaTime correctly here
     }
 
     if (game.feedbackMessage) {
-        drawFeedback(ctx, timestamp);
+        drawFeedback(ctx, performance.now());
     }
 }
 
@@ -314,19 +308,21 @@ function drawEar(ctx, cx, cy, r, sideX, sideY, isHorizontal) {
 }
 
 function drawSleepAnimation(ctx, deltaTime) {
-    const Z_SPEED = 40; 
-    const MAX_Z_OFFSET = 80; 
-    const dist = Z_SPEED * deltaTime * game.zDirection;
-    
-    game.zStream.forEach(z => {
-        z.offsetY += dist;
-        const distance = Math.abs(z.offsetY);
-        const progress = Math.min(1, distance / MAX_Z_OFFSET);
-        z.offsetX = z.startOffsetX * (1 - progress); 
-        z.alpha = 1 - progress; 
-    });
+    if (!game.paused) {
+        const Z_SPEED = 40; 
+        const MAX_Z_OFFSET = 80; 
+        const dist = Z_SPEED * deltaTime * game.zDirection;
+        
+        game.zStream.forEach(z => {
+            z.offsetY += dist;
+            const distance = Math.abs(z.offsetY);
+            const progress = Math.min(1, distance / MAX_Z_OFFSET);
+            z.offsetX = z.startOffsetX * (1 - progress); 
+            z.alpha = 1 - progress; 
+        });
 
-    game.zStream = game.zStream.filter(z => Math.abs(z.offsetY) < MAX_Z_OFFSET);
+        game.zStream = game.zStream.filter(z => Math.abs(z.offsetY) < MAX_Z_OFFSET);
+    }
 
     const head = game.zHead; 
     const cx = (head.x + 0.5) * CELL_SIZE;
