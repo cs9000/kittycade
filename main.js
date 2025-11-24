@@ -221,6 +221,9 @@ function update() {
 window.loseLife = function(msg) {
     game.lives--;
     playSound('lose');
+    if (game.isTurbo) {
+        window.restoreNormalSpeed();
+    }
     game.systemPaused = true;
     updatePauseState();
 
