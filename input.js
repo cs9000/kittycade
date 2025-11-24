@@ -1,6 +1,16 @@
 function initInput() {
     // Keyboard
     document.addEventListener('keydown', (e) => {
+        if (e.altKey && e.key.toLowerCase() === 'h') {
+            if (game.started && !game.gameOver && !game.paused) {
+                game.highScore = 0;
+                localStorage.setItem('catSnakeHighScore', '0');
+                updateUI();
+                e.preventDefault();
+                return;
+            }
+        }
+
         const startScreen = document.getElementById('startScreen');
         const gameOverScreen = document.getElementById('gameOverScreen');
 

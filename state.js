@@ -5,7 +5,7 @@ let game = {
     inputBuffer: [],
     food: null, litterBox: null, treat: null, catBed: null, mouse: null, catnip: null, 
     score: 0,
-    highScore: localStorage.getItem('catSnakeHighScore') || 0,
+    highScore: parseInt(localStorage.getItem('catSnakeHighScore') || '0', 10),
     lives: 3, level: 1, foodCount: 0,
     speed: 200, 
     paused: false, userPaused: false, systemPaused: false,

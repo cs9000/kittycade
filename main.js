@@ -80,7 +80,7 @@ function updatePauseState() {
     // 1. Stop everything and update UI
     stopGameLoops();
     document.getElementById('pauseOverlay').classList.toggle('hidden', !game.userPaused);
-    document.getElementById('pauseBtn').textContent = game.userPaused ? '▶️ Resume' : '⏸ Pause';
+    document.getElementById('pauseBtn').textContent = game.userPaused ? '▶️' : '⏸';
 
     // 2. If we just paused, calculate remaining time and save state
     if (game.userPaused) {
@@ -157,6 +157,7 @@ window.initGame = function() {
     game.foodCount = 0;
     game.speed = 200;
     game.baseSpeed = 200;
+    game.highScore = parseInt(localStorage.getItem('catSnakeHighScore') || '0', 10);
     game.started = true;
     game.lastFrameTime = performance.now(); // Initialize for logic updates
     game.lastRenderTime = performance.now(); // Initialize for rendering updates
@@ -268,7 +269,7 @@ function endGame() {
     }
     
     document.getElementById('finalScore').textContent = `Your Score: ${game.score}`;
-    document.getElementById('highScoreDisplay').textContent = `High Score: ${game.highScore}`;
+    document.getElementById('highScoreDisplay').textContent = `High: ${game.highScore}`;
     document.getElementById('gameOverScreen').classList.remove('hidden');
 }
 
@@ -338,7 +339,7 @@ window.togglePause = function() {
 }
 
 function updateUI() {
-    document.getElementById('score').textContent = `Score: ${game.score}`;
+    document.getElementById('score').textContent = `Score: ${game.score} | High: ${game.highScore}`;
     document.getElementById('level').textContent = `Level: ${game.level}`;
     document.getElementById('lives').textContent = `Lives: ${'🐱'.repeat(Math.max(0, game.lives))}`;
 }
@@ -363,7 +364,7 @@ document.getElementById('pauseBtn').addEventListener('click', () => {
 
 document.getElementById('muteBtn').addEventListener('click', () => {
     game.muted = !game.muted;
-    document.getElementById('muteBtn').textContent = game.muted ? '🔇 Muted' : '🔊 Sound';
+    document.getElementById('muteBtn').textContent = game.muted ? '🔇' : '🔊';
 });
 
     initInput();

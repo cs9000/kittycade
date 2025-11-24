@@ -217,6 +217,11 @@ function updateGameLogic() {
         game.shouldAnimateSleep = false;
     }
 
+    if (game.score > game.highScore) {
+        game.highScore = game.score;
+        localStorage.setItem('catSnakeHighScore', game.highScore);
+    }
+
     game.nextHeadPos = null; 
     window.checkLevelUp();
     updateUI(); // Update UI after game logic, including score changes
