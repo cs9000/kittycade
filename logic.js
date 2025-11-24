@@ -38,6 +38,7 @@ function isOccupied(x, y) {
     if (game.treat && game.treat.x === x && game.treat.y === y) return true;
     if (game.catBed && game.catBed.x === x && game.catBed.y === y) return true;
     if (game.catnip && game.catnip.x === x && game.catnip.y === y) return true; 
+    if (game.mouse && game.mouse.x === x && game.mouse.y === y) return true;
     return false;
 }
 

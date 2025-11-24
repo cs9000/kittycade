@@ -253,7 +253,7 @@ window.loseLife = function(msg) {
                                             startFeedbackCountdown(feedbackCountdown);
     
                                             updateUI(); // Update UI after life is lost
-} // Added missing closing brace
+}
 
 function endGame() {
     game.gameOver = true;
