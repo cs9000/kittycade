@@ -340,7 +340,7 @@ function drawSleepAnimation(ctx, renderDeltaTime) {
 function drawFeedback(ctx, timestamp) {
     const timeSinceFeedbackStart = timestamp - game.feedbackStartTime;
     const isCollision = game.feedbackMessage.includes("hit the wall") || game.feedbackMessage.includes("ran into yourself") || game.feedbackMessage.includes("Fatal");
-    const isTurboOrRestore = game.feedbackMessage.includes("TURBO BOOST") || game.feedbackMessage.includes("Speed Restored");
+    const isTurboOrRestore = game.feedbackMessage.includes("ZOOMIES") || game.feedbackMessage.includes("Speed Restored");
     
     if (!isTurboOrRestore) {
         if (isCollision && timeSinceFeedbackStart < 100) { 

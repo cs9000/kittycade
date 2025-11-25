@@ -310,7 +310,7 @@ window.activateTurbo = function() {
     game.speed = 120; 
     startMouseLogic(); 
     
-    game.feedbackMessage = `TURBO BOOST!`;
+    game.feedbackMessage = `ZOOMIES!`;
     game.feedbackStartTime = performance.now(); 
     
     turboCountdown = 5000;
@@ -341,7 +341,7 @@ window.togglePause = function() {
 function updateUI() {
     document.getElementById('score').textContent = `Score: ${game.score} | High: ${game.highScore}`;
     document.getElementById('level').textContent = `Level: ${game.level}`;
-    document.getElementById('lives').textContent = `Lives: ${'🐱'.repeat(Math.max(0, game.lives))}`;
+    document.getElementById('lives').textContent = `${'🐱'.repeat(Math.max(0, game.lives))}`;
 }
 
 document.getElementById('startBtn').addEventListener('click', () => {
