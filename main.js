@@ -307,7 +307,7 @@ window.activateTurbo = function() {
     if (featherTimerId) { clearTimeout(featherTimerId); } // Clear any existing timer
     
     game.isTurbo = true;
-    game.speed = 120; 
+    game.speed = game.baseSpeed * 0.75; 
     startMouseLogic(); 
     
     game.feedbackMessage = `ZOOMIES!`;
