@@ -1,7 +1,37 @@
 let zIntervalId = null; 
 
+function playAudioFile(url) {
+    if (game.muted) return;
+    try {
+        const audio = new Audio(url);
+        audio.play();
+    } catch (e) {
+        console.error("Could not play audio:", e);
+    }
+}
+
 function playSound(type) {
     if (game.muted) return;
+    if (type === 'food') {
+        playAudioFile('audio/eat_food.mp3');
+        return;
+    }
+    if (type === 'litter') {
+        playAudioFile('audio/litter_box2.wav');
+        return;
+    }
+    if (type === 'bed') {
+        playAudioFile('audio/snoring2.wav');
+        return;
+    }
+    if (type === 'treat') {
+        playAudioFile('audio/yarn.wav');
+        return;
+    }
+    if (type === 'mouse') {
+        playAudioFile('audio/mouse.mp3');
+        return;
+    }
     try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const oscillator = audioCtx.createOscillator();
@@ -11,10 +41,6 @@ function playSound(type) {
         gainNode.gain.value = 0.1;
         
         switch(type) {
-            case 'food': oscillator.frequency.value = 500; oscillator.start(); oscillator.stop(audioCtx.currentTime + 0.1); break;
-            case 'litter': oscillator.frequency.value = 300; oscillator.start(); oscillator.stop(audioCtx.currentTime + 0.2); break;
-            case 'treat': oscillator.frequency.value = 700; oscillator.start(); oscillator.stop(audioCtx.currentTime + 0.15); break;
-            case 'bed': oscillator.frequency.value = 400; oscillator.start(); oscillator.stop(audioCtx.currentTime + 0.5); break;
             case 'lose': oscillator.frequency.value = 200; oscillator.start(); oscillator.stop(audioCtx.currentTime + 0.3); break;
         }
     } catch(e) { /* Ignore */ }
@@ -183,7 +209,7 @@ function updateGameLogic() {
     }
     else if (game.mouse && tx === game.mouse.x && ty === game.mouse.y) {
         game.score += 500; game.mouse = null; isGrowing = true; 
-        playSound('treat');
+        playSound('mouse');
     }
     else if (game.catnip && tx === game.catnip.x && ty === game.catnip.y) {
         game.score += 1000; game.catnip = null;
