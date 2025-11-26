@@ -32,6 +32,10 @@ function playSound(type) {
         playAudioFile('audio/mouse.mp3');
         return;
     }
+    if (type === 'catnip') {
+        playAudioFile('audio/catnip.mp3');
+        return;
+    }
     try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const oscillator = audioCtx.createOscillator();
@@ -213,7 +217,7 @@ function updateGameLogic() {
     }
     else if (game.catnip && tx === game.catnip.x && ty === game.catnip.y) {
         game.score += 1000; game.catnip = null;
-        playSound('treat');
+        playSound('catnip');
         window.activateTurbo(); 
     }
 
