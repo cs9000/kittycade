@@ -221,7 +221,7 @@ function update() {
 
 window.loseLife = function(msg) {
     game.lives--;
-    playSound('lose');
+    // playSound('lose');
     if (game.isTurbo) {
         window.restoreNormalSpeed();
     }
@@ -367,8 +367,28 @@ document.getElementById('muteBtn').addEventListener('click', () => {
     document.getElementById('muteBtn').textContent = game.muted ? '🔇' : '🔊';
 });
 
-    initInput();
+document.addEventListener('DOMContentLoaded', () => {
+    const startScreen = document.getElementById('startScreen');
+    const loadingOverlay = document.getElementById('loadingOverlay');
 
-// Ensure legend items are drawn when the page initially loads
-createLitterTexture();
-drawLegendItems();
+    // Show loading overlay
+    loadingOverlay.classList.remove('hidden');
+
+    initInput();
+    createLitterTexture();
+    drawLegendItems();
+
+    preloadSounds().then(() => {
+        // Sounds loaded, hide loading and show start screen
+        loadingOverlay.classList.add('hidden');
+        startScreen.classList.remove('hidden');
+    }).catch(error => {
+        console.error("Failed to preload sounds:", error);
+        // Even if sounds fail, show the start screen so the game is playable
+        loadingOverlay.innerHTML = '<h1>Error loading sounds.</h1>';
+        setTimeout(() => {
+            loadingOverlay.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+        }, 2000);
+    });
+});

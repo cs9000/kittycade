@@ -19,7 +19,7 @@
         </div>
         <canvas id="gameCanvas" width="600" height="600"></canvas>
         
-        <div id="startScreen">
+        <div id="startScreen" class="hidden">
             <h1>🐱 Kittycade</h1>
             <div class="instructions">
                 <p><strong>Get food and catch the mouse to grow.<br>Use the litter box to shrink.</strong></p>
@@ -50,9 +50,13 @@
         </div>
         
         <div id="pauseOverlay" class="hidden">PAUSED</div>
+        <div id="loadingOverlay">
+            <h1>Loading...</h1>
+        </div>
     </div>
     
     <script src="constants.js"></script>
+    <script src="audio.js"></script>
     <script src="state.js"></script>
     <script src="renderer.js"></script>
     <script src="logic.js"></script>
