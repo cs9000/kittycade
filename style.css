@@ -86,15 +86,18 @@ button:hover { background: #5568d3; }
     background: #f8f9ff;
     padding: 15px;
     border-radius: 10px;
-    margin: 20px 0;
+    margin: 20px 0 0;
+}
+.instructions p:last-child {
+    margin-bottom: 0;
 }
 .legend {
     background: #f8f9ff;
     padding: 15px;
     border-radius: 10px;
-    margin: 20px 0;
+    margin: 0 auto 20px;
     display: grid;
-    grid-template-columns: 40px 1fr;
+    grid-template-columns: 40px auto;
     gap: 8px 12px;
     align-items: center;
     text-align: left;
