@@ -48,35 +48,28 @@ function initInput() {
         if (newDir) e.preventDefault();
     });
     
-    // Touch
-    const canvas = document.getElementById('gameCanvas');
-    let touchStartX = 0;
-    let touchStartY = 0;
-    
-    canvas.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-        e.preventDefault(); 
-    }, { passive: false });
-    
-    canvas.addEventListener('touchend', (e) => {
-        if (!game.started || game.paused || game.gameOver) return; 
-        
-        const touchEndX = e.changedTouches[0].clientX;
-        const touchEndY = e.changedTouches[0].clientY;
-        const dx = touchEndX - touchStartX;
-        const dy = touchEndY - touchStartY;
-        let newDir = null;
-        
-        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > SWIPE_THRESHOLD) {
-            newDir = dx > 0 ? {x: 1, y: 0} : {x: -1, y: 0};
-        } else if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > SWIPE_THRESHOLD) {
-            newDir = dy > 0 ? {x: 0, y: 1} : {x: 0, y: -1};
+    setupMobileControls();
+}
+
+function setupMobileControls() {
+    const directions = {
+        'btn-up': {x: 0, y: -1},
+        'btn-down': {x: 0, y: 1},
+        'btn-left': {x: -1, y: 0},
+        'btn-right': {x: 1, y: 0}
+    };
+
+    Object.keys(directions).forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+            btn.addEventListener('pointerdown', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (!game.started || game.paused || game.gameOver) return;
+                pushDirection(directions[id]);
+            });
         }
-        
-        if (newDir) pushDirection(newDir);
-        e.preventDefault();
-    }, { passive: false });
+    });
 }
 
 function pushDirection(newDir) {

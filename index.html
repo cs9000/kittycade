@@ -17,7 +17,22 @@
                 <button id="pauseBtn">⏸</button>
             </div>
         </div>
-        <canvas id="gameCanvas" width="600" height="600"></canvas>
+        <div class="game-wrapper">
+            <canvas id="gameCanvas" width="600" height="600"></canvas>
+            <div id="virtual-dpad" class="dpad-container">
+                <div class="dpad-row">
+                    <button id="btn-up" class="dpad-btn">▲</button>
+                </div>
+                <div class="dpad-row middle">
+                    <button id="btn-left" class="dpad-btn">◀</button>
+                    <div class="dpad-gap"></div>
+                    <button id="btn-right" class="dpad-btn">▶</button>
+                </div>
+                <div class="dpad-row">
+                    <button id="btn-down" class="dpad-btn">▼</button>
+                </div>
+            </div>
+        </div>
         
         <div id="startScreen" class="hidden">
             <h1>🐱 Kittycade</h1>
