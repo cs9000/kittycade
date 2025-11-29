@@ -7,32 +7,33 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="gameContainer">
-        <div id="ui">
-            <div id="score"></div>
-            <div id="level">Level: 1</div>
-            <div id="lives">Lives: 🐱🐱🐱</div>
-            <div id="controls">
-                <button id="muteBtn">🔊</button>
-                <button id="pauseBtn">⏸</button>
+    <div id="main-content-wrapper">
+        <div id="gameContainer">
+            <div id="ui">
+                <div id="score"></div>
+                <div id="level">Level: 1</div>
+                <div id="lives">Lives: 🐱🐱🐱</div>
+                <div id="controls">
+                    <button id="muteBtn">🔊</button>
+                    <button id="pauseBtn">⏸</button>
+                </div>
             </div>
-        </div>
-        <div class="game-wrapper">
             <canvas id="gameCanvas" width="600" height="600"></canvas>
-            <div id="virtual-dpad" class="dpad-container">
-                <div class="dpad-row">
-                    <button id="btn-up" class="dpad-btn">▲</button>
-                </div>
-                <div class="dpad-row middle">
-                    <button id="btn-left" class="dpad-btn">◀</button>
-                    <div class="dpad-gap"></div>
-                    <button id="btn-right" class="dpad-btn">▶</button>
-                </div>
-                <div class="dpad-row">
-                    <button id="btn-down" class="dpad-btn">▼</button>
-                </div>
+        </div>
+        <div id="virtual-dpad" class="dpad-container">
+            <div class="dpad-row">
+                <button id="btn-up" class="dpad-btn">▲</button>
+            </div>
+            <div class="dpad-row middle">
+                <button id="btn-left" class="dpad-btn">◀</button>
+                <div class="dpad-gap"></div>
+                <button id="btn-right" class="dpad-btn">▶</button>
+            </div>
+            <div class="dpad-row">
+                <button id="btn-down" class="dpad-btn">▼</button>
             </div>
         </div>
+    </div>
         
         <div id="startScreen" class="hidden">
             <h1>🐱 Kittycade</h1>

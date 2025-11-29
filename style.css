@@ -153,16 +153,15 @@ button:hover { background: #5568d3; }
     button { padding: 6px 12px; font-size: 12px; }
 }
 
-/* D-pad and responsive wrapper styles */
-.game-wrapper {
+/* D-pad and responsive layout styles */
+#main-content-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
 }
 
 .dpad-container {
-    display: none; /* Hidden by default */
+    display: none; /* Hidden by default, shown via @media */
     margin-top: 20px;
     margin-bottom: 30px; /* Safety for iOS Home Bar */
     touch-action: none; /* Disables browser zoom/scroll */
@@ -186,7 +185,7 @@ button:hover { background: #5568d3; }
     background: rgba(85, 104, 211, 1);
 }
 
-/* Show D-pad only on touch devices */
+/* Show D-pad only on touch devices and arrange vertically */
 @media (pointer: coarse) {
     .dpad-container {
         display: flex;
@@ -195,17 +194,16 @@ button:hover { background: #5568d3; }
     }
 }
 
-/* Tablet / Desktop Layout */
+/* Tablet landscape layout */
 @media (pointer: coarse) and (min-width: 768px) and (orientation: landscape) {
-    .game-wrapper {
+    #main-content-wrapper {
         flex-direction: row;
         align-items: center;
+        gap: 40px;
     }
 
     .dpad-container {
-        margin-top: 0;
-        margin-left: 40px;
-        margin-bottom: 0;
+        margin: 0; /* Reset margins */
         transform: scale(1.2);
     }
 }
