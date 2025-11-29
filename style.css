@@ -202,6 +202,10 @@ button:hover { background: #5568d3; }
         gap: 40px;
     }
 
+    #gameContainer {
+        width: auto;
+    }
+
     .dpad-container {
         margin: 0; /* Reset margins */
         transform: scale(1.2);
