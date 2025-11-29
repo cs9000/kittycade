@@ -168,10 +168,10 @@ button:hover { background: #5568d3; }
 }
 
 .dpad-row { display: flex; justify-content: center; }
-.dpad-gap { width: 42px; height: 36px; }
+.dpad-gap { width: 22px; height: 46px; }
 .dpad-btn {
-    width: 36px;
-    height: 36px;
+    width: 46px;
+    height: 46px;
     margin: 2px;
     background: rgba(102, 126, 234, 0.8);
     border: 2px solid white;
