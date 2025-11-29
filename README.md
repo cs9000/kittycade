@@ -5,7 +5,7 @@ Kittycade arcade game!
 
 1.  **Start Game:** Click the "Start Game" button or press any key on your keyboard when on the start screen.
 2.  **Ready! Countdown:** The game will pause briefly (2 seconds) with a "Ready!" message before starting. This is normal behavior.
-3.  **Movement:** Use the Arrow keys or WASD keys to control the cat. On touch devices, swipe on the game canvas.
+3.  **Movement:** Use the Arrow keys or WASD keys to control the cat. On touch devices, use the virtual d-pad.
 4.  **Pause/Resume:** Press the 'P' key or Spacebar, or click the "Pause" button, to pause and resume the game.
 
 ## Game Elements Legend
