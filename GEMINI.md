@@ -16,3 +16,4 @@ You are an AI assistant helping with the kittycade project.
 @state.js
 @style.css
 @test
+@audio.js
