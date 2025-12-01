@@ -149,14 +149,15 @@ function updatePauseState() {
 
 // --- Game Flow Control ---
 
-window.initGame = function() {
+window.initGame = function(baseSpeed = 200) {
     resetGameState();
     game.score = 0;
     game.lives = 3;
     game.level = 1;
     game.foodCount = 0;
-    game.speed = 200;
-    game.baseSpeed = 200;
+    game.initialSpeed = baseSpeed;
+    game.speed = baseSpeed;
+    game.baseSpeed = baseSpeed;
     game.highScore = parseInt(localStorage.getItem('catSnakeHighScore') || '0', 10);
     game.started = true;
     game.lastFrameTime = performance.now(); // Initialize for logic updates
@@ -277,7 +278,7 @@ window.checkLevelUp = function() {
     const threshold = game.level * 5000;
     if (game.score >= threshold) {
         game.level++;
-        game.baseSpeed = Math.max(50, 200 - (game.level - 1) * 15);
+        game.baseSpeed = Math.max(50, game.initialSpeed - (game.level - 1) * 15);
         game.speed = game.baseSpeed;
         if (game.isTurbo) {
             window.restoreNormalSpeed(); // Properly end turbo mode
@@ -344,10 +345,13 @@ function updateUI() {
     document.getElementById('lives').textContent = `${'🐱'.repeat(Math.max(0, game.lives))}`;
 }
 
-document.getElementById('startBtn').addEventListener('click', () => {
+function startGame(speed) {
     document.getElementById('startScreen').classList.add('hidden');
-    window.initGame();
-});
+    window.initGame(speed);
+}
+
+document.getElementById('startNormalBtn').addEventListener('click', () => startGame(200));
+document.getElementById('startRelaxedBtn').addEventListener('click', () => startGame(230));
 
 document.getElementById('restartBtn').addEventListener('click', () => {
     document.getElementById('gameOverScreen').classList.add('hidden');

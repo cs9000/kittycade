@@ -226,3 +226,15 @@ button:hover { background: #5568d3; }
         align-self: auto;
     }
 }
+
+.start-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.start-buttons button {
+    padding: 12px 24px;
+    font-size: 18px;
+}

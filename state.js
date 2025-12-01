@@ -16,7 +16,8 @@ let game = {
     zHead: null, zStream: [], zDirection: -1, shouldAnimateSleep: false,
     savedSnakeState: null,
     mouseLastLogicTime: 0,
-    baseSpeed: 200, 
+    baseSpeed: 200,
+    initialSpeed: 200, 
     isTurbo: false,
 };
 

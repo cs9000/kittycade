@@ -14,12 +14,7 @@ function initInput() {
         const startScreen = document.getElementById('startScreen');
         const gameOverScreen = document.getElementById('gameOverScreen');
 
-        if (!game.started && !startScreen.classList.contains('hidden')) {
-            startScreen.classList.add('hidden');
-            window.initGame();
-            return;
-        }
-        
+
         if (game.gameOver && !gameOverScreen.classList.contains('hidden')) {
             gameOverScreen.classList.add('hidden');
             window.initGame();
