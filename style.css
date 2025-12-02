@@ -32,6 +32,11 @@ body {
     display: flex;
     gap: 0.5em;
 }
+#level-lives-container {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+}
 #controls { display: flex; gap: 10px; }
 button {
     padding: 8px 16px;
@@ -158,6 +163,11 @@ button:hover { background: #5568d3; }
     #score {
         display: flex;
         flex-direction: column;
+    }
+    #level-lives-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 }
 
