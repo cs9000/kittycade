@@ -351,7 +351,7 @@ function startGame(speed) {
 }
 
 document.getElementById('startNormalBtn').addEventListener('click', () => startGame(200));
-document.getElementById('startRelaxedBtn').addEventListener('click', () => startGame(230));
+document.getElementById('startRelaxedBtn').addEventListener('click', () => startGame(245));
 
 document.getElementById('restartBtn').addEventListener('click', () => {
     document.getElementById('gameOverScreen').classList.add('hidden');
