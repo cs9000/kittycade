@@ -28,6 +28,10 @@ body {
     font-weight: bold;
     color: #333;
 }
+#score {
+    display: flex;
+    gap: 0.5em;
+}
 #controls { display: flex; gap: 10px; }
 button {
     padding: 8px 16px;
@@ -151,6 +155,10 @@ button:hover { background: #5568d3; }
     #gameContainer { padding: 15px; }
     #ui { font-size: 14px; }
     button { padding: 6px 12px; font-size: 12px; }
+    #score {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 /* D-pad and responsive layout styles */
