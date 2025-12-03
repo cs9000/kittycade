@@ -9,7 +9,7 @@ let game = {
     lives: 3, level: 1, foodCount: 0,
     speed: 200, 
     paused: false, userPaused: false, systemPaused: false,
-    gameOver: false, muted: false, animating: false, started: false,
+    gameOver: false, muted: JSON.parse(localStorage.getItem('catSnakeMuted') || 'false'), animating: false, started: false,
     lastFrameTime: 0, lag: 0,
     lastRenderTime: 0,
     nextHeadPos: null, feedbackMessage: null, feedbackStartTime: 0, 

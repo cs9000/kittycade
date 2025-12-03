@@ -370,6 +370,7 @@ document.getElementById('pauseBtn').addEventListener('click', () => {
 document.getElementById('muteBtn').addEventListener('click', () => {
     game.muted = !game.muted;
     document.getElementById('muteBtn').textContent = game.muted ? '🔇' : '🔊';
+    localStorage.setItem('catSnakeMuted', game.muted);
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -378,6 +379,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Show loading overlay
     loadingOverlay.classList.remove('hidden');
+
+    // Set initial mute button state
+    document.getElementById('muteBtn').textContent = game.muted ? '🔇' : '🔊';
 
     initInput();
     createLitterTexture();
