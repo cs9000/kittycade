@@ -266,6 +266,11 @@ function endGame() {
     stopGameLoops();
     playSound('game_over');
 
+    // Wait 3 seconds and then play the intro song.
+    game.introMusicTimeoutId = setTimeout(() => {
+        window.playIntroSound();
+    }, 3000);
+
     if (game.score > game.highScore) {
         game.highScore = game.score;
         localStorage.setItem('catSnakeHighScore', game.highScore);
@@ -350,6 +355,12 @@ function updateUI() {
 }
 
 function startGame(speed) {
+    game.lastGameSpeed = speed; // Remember the last speed
+    // Stop the delayed intro music if it's scheduled
+    if (game.introMusicTimeoutId) {
+        clearTimeout(game.introMusicTimeoutId);
+        game.introMusicTimeoutId = null;
+    }
     window.stopIntroSound();
     document.getElementById('startScreen').classList.add('hidden');
     window.initGame(speed);
@@ -359,10 +370,17 @@ document.getElementById('startNormalBtn').addEventListener('click', () => startG
 document.getElementById('startRelaxedBtn').addEventListener('click', () => startGame(245));
 
 document.getElementById('restartBtn').addEventListener('click', () => {
+    // Stop the delayed intro music if it's scheduled
+    if (game.introMusicTimeoutId) {
+        clearTimeout(game.introMusicTimeoutId);
+        game.introMusicTimeoutId = null;
+    }
+    // Stop the intro sound if it's playing
+    window.stopIntroSound();
+
     document.getElementById('gameOverScreen').classList.add('hidden');
-    document.getElementById('startScreen').classList.remove('hidden');
-    resetGameState();
-    window.playIntroSound();
+    // We don't reset the entire game state, just re-init the game
+    window.initGame(game.lastGameSpeed);
 });
 
 document.getElementById('pauseBtn').addEventListener('click', () => {

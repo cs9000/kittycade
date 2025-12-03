@@ -19,6 +19,8 @@ let game = {
     baseSpeed: 200,
     initialSpeed: 200, 
     isTurbo: false,
+    introMusicTimeoutId: null,
+    lastGameSpeed: 200,
 };
 
 function resetGameState() {
