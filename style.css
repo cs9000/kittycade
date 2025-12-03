@@ -56,6 +56,18 @@ button:hover { background: #5568d3; }
     text-align: center;
 }
 
+#muteBtn, #pauseBtn {
+    background: white;
+    color: #333;
+    border: 2px solid #333;
+    line-height: 1;
+    font-size: 16px;
+}
+
+#muteBtn:hover, #pauseBtn:hover {
+    background: #eee;
+}
+
 #gameCanvas {
     border: 3px solid #333;
     border-radius: 10px;
