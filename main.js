@@ -347,6 +347,7 @@ function updateUI() {
 }
 
 function startGame(speed) {
+    window.stopIntroSound();
     document.getElementById('startScreen').classList.add('hidden');
     window.initGame(speed);
 }
@@ -356,7 +357,9 @@ document.getElementById('startRelaxedBtn').addEventListener('click', () => start
 
 document.getElementById('restartBtn').addEventListener('click', () => {
     document.getElementById('gameOverScreen').classList.add('hidden');
-    window.initGame();
+    document.getElementById('startScreen').classList.remove('hidden');
+    resetGameState();
+    window.playIntroSound();
 });
 
 document.getElementById('pauseBtn').addEventListener('click', () => {
@@ -371,11 +374,19 @@ document.getElementById('muteBtn').addEventListener('click', () => {
     game.muted = !game.muted;
     document.getElementById('muteBtn').textContent = game.muted ? '🔇' : '🔊';
     localStorage.setItem('catSnakeMuted', game.muted);
+    if (!game.started) {
+        if (game.muted) {
+            window.stopIntroSound();
+        } else {
+            window.playIntroSound();
+        }
+    }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
     const startScreen = document.getElementById('startScreen');
     const loadingOverlay = document.getElementById('loadingOverlay');
+    const clickToStartOverlay = document.getElementById('clickToStartOverlay');
 
     // Show loading overlay
     loadingOverlay.classList.remove('hidden');
@@ -388,9 +399,9 @@ document.addEventListener('DOMContentLoaded', () => {
     drawLegendItems();
 
     preloadSounds().then(() => {
-        // Sounds loaded, hide loading and show start screen
+        // Sounds loaded, hide loading and show click to start overlay
         loadingOverlay.classList.add('hidden');
-        startScreen.classList.remove('hidden');
+        clickToStartOverlay.classList.remove('hidden');
     }).catch(error => {
         console.error("Failed to preload sounds:", error);
         // Even if sounds fail, show the start screen so the game is playable
@@ -399,5 +410,11 @@ document.addEventListener('DOMContentLoaded', () => {
             loadingOverlay.classList.add('hidden');
             startScreen.classList.remove('hidden');
         }, 2000);
+    });
+
+    clickToStartOverlay.addEventListener('click', () => {
+        clickToStartOverlay.classList.add('hidden');
+        startScreen.classList.remove('hidden');
+        window.playIntroSound();
     });
 });

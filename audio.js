@@ -8,6 +8,23 @@ const sounds = {
 };
 
 const audioCache = {};
+let introAudio = null;
+
+window.playIntroSound = function() {
+    if (game.muted) return;
+    if (!introAudio) {
+        introAudio = new Audio('audio/intro.mp3');
+        introAudio.loop = true;
+    }
+    introAudio.play();
+}
+
+window.stopIntroSound = function() {
+    if (introAudio) {
+        introAudio.pause();
+        introAudio.currentTime = 0;
+    }
+}
 
 function preloadSounds() {
     console.log('Starting to preload sounds...');
