@@ -395,7 +395,7 @@ document.getElementById('muteBtn').addEventListener('click', () => {
     game.muted = !game.muted;
     document.getElementById('muteBtn').textContent = game.muted ? '🔇' : '🔊';
     localStorage.setItem('catSnakeMuted', game.muted);
-    if (!game.started) {
+    if (!game.started || game.gameOver) {
         if (game.muted) {
             window.stopIntroSound();
         } else {
