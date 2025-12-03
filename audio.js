@@ -8,6 +8,7 @@ const sounds = {
     'ready': 'audio/ready.wav',
     'lose_life': 'audio/lose_life2.wav',
     'game_over': 'audio/game_over.wav',
+    'yay': 'audio/yay.mp3',
 };
 
 const audioCache = {};

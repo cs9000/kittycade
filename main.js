@@ -280,6 +280,7 @@ window.checkLevelUp = function() {
     const threshold = game.level * 5000;
     if (game.score >= threshold) {
         game.level++;
+        playSound('yay');
         game.baseSpeed = Math.max(50, game.initialSpeed - (game.level - 1) * 15);
         game.speed = game.baseSpeed;
         if (game.isTurbo) {
