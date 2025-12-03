@@ -5,6 +5,9 @@ const sounds = {
     'bed': 'audio/snoring2.wav',
     'treat': 'audio/yarn.wav',
     'mouse': 'audio/mouse.mp3',
+    'ready': 'audio/ready.wav',
+    'lose_life': 'audio/lose_life2.wav',
+    'game_over': 'audio/game_over.wav',
 };
 
 const audioCache = {};

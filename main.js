@@ -197,6 +197,7 @@ function startTurboCountdown(duration) {
 }
 
 function showReady() {
+    playSound('ready');
     game.systemPaused = true;
     updatePauseState();
     
@@ -222,7 +223,7 @@ function update() {
 
 window.loseLife = function(msg) {
     game.lives--;
-    // playSound('lose');
+    playSound('lose_life');
     if (game.isTurbo) {
         window.restoreNormalSpeed();
     }
@@ -263,6 +264,7 @@ function endGame() {
     game.userPaused = false;
     updatePauseState();
     stopGameLoops();
+    playSound('game_over');
 
     if (game.score > game.highScore) {
         game.highScore = game.score;
