@@ -75,6 +75,7 @@ function pushDirection(newDir) {
     if ((newDir.x !== 0 && currentDir.x === 0) || (newDir.y !== 0 && currentDir.y === 0)) {
         if (game.inputBuffer.length < 2) {
             game.inputBuffer.push(newDir);
+            playSound('meow');
         }
     }
 }

@@ -9,6 +9,7 @@ const sounds = {
     'lose_life': 'audio/lose_life2.wav',
     'game_over': 'audio/game_over.wav',
     'yay': 'audio/yay.mp3',
+    'meow': 'audio/meow_short_quiet.wav',
 };
 
 const audioCache = {};
