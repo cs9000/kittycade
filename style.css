@@ -307,6 +307,12 @@ button:hover { background: #5568d3; }
         margin: 0 auto 5px;
         padding: 10px;
         gap: 4px 8px;
+        grid-auto-rows: minmax(30px, auto);
+    }
+    .legend-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .legend-text {
         font-size: 12px;
