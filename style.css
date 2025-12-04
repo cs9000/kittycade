@@ -120,13 +120,16 @@ button:hover { background: #5568d3; }
     margin: 0 auto 10px;
     display: grid;
     grid-template-columns: 40px auto;
-    gap: 8px 12px;
-    align-items: center;
+    gap: 12px 12px;
     text-align: left;
 }
 .legend-item {
     font-size: 24px;
     text-align: center;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .yarn-ball-legend, .litter-box-legend { 
     width: 40px; 
@@ -136,6 +139,9 @@ button:hover { background: #5568d3; }
     color: #555;
     font-weight: bold;
     font-size: 14px;
+    height: 40px;
+    display: flex;
+    align-items: center;
 }
 .hidden { display: none !important; }
 #pauseOverlay {
@@ -306,16 +312,19 @@ button:hover { background: #5568d3; }
     .legend {
         margin: 0 auto 5px;
         padding: 10px;
-        gap: 4px 8px;
-        grid-auto-rows: minmax(30px, auto);
+        gap: 8px 8px;
     }
     .legend-item {
         display: flex;
         align-items: center;
         justify-content: center;
+        height: 30px;
     }
     .legend-text {
         font-size: 12px;
+        height: 30px;
+        display: flex;
+        align-items: center;
     }
     .start-buttons {
         margin-top: 10px;
