@@ -290,3 +290,32 @@ button:hover { background: #5568d3; }
     padding: 12px 24px;
     font-size: 18px;
 }
+
+@media (max-width: 480px) {
+    #startScreen {
+        padding: 10px;
+    }
+    #startScreen h1 {
+        font-size: 24px;
+        margin-bottom: 5px;
+    }
+    .instructions {
+        margin: 5px 0;
+        padding: 10px;
+    }
+    .legend {
+        margin: 0 auto 5px;
+        padding: 10px;
+        gap: 4px 8px;
+    }
+    .legend-text {
+        font-size: 12px;
+    }
+    .start-buttons {
+        margin-top: 10px;
+    }
+    .start-buttons button {
+        padding: 8px 16px;
+        font-size: 16px;
+    }
+}
