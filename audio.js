@@ -1,39 +1,41 @@
 const sounds = {
-    'catnip': 'audio/catnip.mp3',
-    'food': 'audio/eat_food.mp3',
-    'litter': 'audio/litter_box2.wav',
-    'bed': 'audio/snoring2.wav',
-    'treat': 'audio/yarn.wav',
-    'mouse': 'audio/mouse.mp3',
-    'ready': 'audio/ready.wav',
-    'lose_life': 'audio/lose_life2.wav',
-    'game_over': 'audio/game_over.wav',
-    'yay': 'audio/yay.mp3',
-    'meow': 'audio/meow_short_quiet.wav',
+    'catnip': { path: 'audio/catnip.mp3', volume: 0.6 },
+    'food': { path: 'audio/eat_food.mp3', volume: 0.6 },
+    'litter': { path: 'audio/litter_box2.wav', volume: 0.6 },
+    'bed': { path: 'audio/snoring2.wav', volume: 0.6 },
+    'treat': { path: 'audio/yarn.wav', volume: 0.6 },
+    'mouse': { path: 'audio/mouse.mp3', volume: 0.6 },
+    'ready': { path: 'audio/ready.wav', volume: 0.6 },
+    'lose_life': { path: 'audio/lose_life2.wav', volume: 0.6 },
+    'game_over': { path: 'audio/game_over.wav', volume: 0.6 },
+    'yay': { path: 'audio/yay.mp3', volume: 0.6 },
+    'meow': { path: 'audio/meow_short_quiet.wav', volume: 1.0 },
+    'intro': { path: 'audio/intro.mp3', volume: 0.3 },
 };
 
 const audioCache = {};
-let introAudio = null;
 
 window.playIntroSound = function() {
     if (game.muted) return;
-    if (!introAudio) {
-        introAudio = new Audio('audio/intro.mp3');
-        introAudio.loop = true;
+    const audio = audioCache['intro'];
+    if (audio) {
+        audio.loop = true;
+        audio.volume = sounds['intro'].volume;
+        audio.play();
     }
-    introAudio.play();
 }
 
 window.stopIntroSound = function() {
-    if (introAudio) {
-        introAudio.pause();
-        introAudio.currentTime = 0;
+    const audio = audioCache['intro'];
+    if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
     }
 }
 
 function preloadSounds() {
     console.log('Starting to preload sounds...');
-    const promises = Object.entries(sounds).map(([name, src]) => {
+    const promises = Object.entries(sounds).map(([name, soundInfo]) => {
         return new Promise((resolve, reject) => {
             const audio = new Audio();
             
@@ -52,14 +54,14 @@ function preloadSounds() {
                 audio.removeEventListener('canplaythrough', onCanPlay);
                 audio.removeEventListener('error', onError);
 
-                console.error(`Failed to load sound: ${src}`);
-                reject(new Error(`Failed to load sound: ${src}`));
+                console.error(`Failed to load sound: ${soundInfo.path}`);
+                reject(new Error(`Failed to load sound: ${soundInfo.path}`));
             };
 
             audio.addEventListener('canplaythrough', onCanPlay);
             audio.addEventListener('error', onError);
             
-            audio.src = src;
+            audio.src = soundInfo.path;
             audio.load(); // Explicitly trigger loading
 
             // Handle cases where the audio might be cached and ready immediately
@@ -77,11 +79,13 @@ function preloadSounds() {
     });
 }
 
-function playSound(name) {
+function playSound(name, volume) {
     if (game.muted) return;
     const audio = audioCache[name];
-    if (audio) {
+    const soundInfo = sounds[name];
+    if (audio && soundInfo) {
         audio.currentTime = 0;
+        audio.volume = volume !== undefined ? volume : soundInfo.volume;
         audio.play();
     } else {
         console.error(`Sound not found: ${name}`);
