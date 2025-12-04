@@ -96,7 +96,7 @@ button:hover { background: #5568d3; }
 }
 #startScreen h1, #gameOverScreen h1 {
     color: #667eea;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     font-size: 32px;
 }
 #startScreen p, #gameOverScreen p {
@@ -108,7 +108,7 @@ button:hover { background: #5568d3; }
     background: #f8f9ff;
     padding: 15px;
     border-radius: 10px;
-    margin: 20px 0 0;
+    margin: 10px 0 10px;
 }
 .instructions p:last-child {
     margin-bottom: 0;
@@ -117,7 +117,7 @@ button:hover { background: #5568d3; }
     background: #f8f9ff;
     padding: 15px;
     border-radius: 10px;
-    margin: 0 auto 20px;
+    margin: 0 auto 10px;
     display: grid;
     grid-template-columns: 40px auto;
     gap: 8px 12px;
