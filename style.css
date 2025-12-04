@@ -120,26 +120,26 @@ button:hover { background: #5568d3; }
     margin: 0 auto 10px;
     display: grid;
     grid-template-columns: 40px auto;
-    gap: 12px 12px;
+    gap: 8px 12px;
     text-align: left;
 }
 .legend-item {
-    font-size: 24px;
+    font-size: 22px;
     text-align: center;
-    height: 40px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .yarn-ball-legend, .litter-box-legend { 
-    width: 40px; 
-    height: 40px; 
+    width: 30px; 
+    height: 30px; 
 }
 .legend-text {
     color: #555;
     font-weight: bold;
-    font-size: 14px;
-    height: 40px;
+    font-size: 13px;
+    height: 30px;
     display: flex;
     align-items: center;
 }
