@@ -8,7 +8,7 @@ const sounds = {
     'ready': { path: 'audio/ready.wav', volume: 0.6 },
     'lose_life': { path: 'audio/lose_life2.wav', volume: 0.6 },
     'game_over': { path: 'audio/game_over.wav', volume: 0.6 },
-    'yay': { path: 'audio/yay.mp3', volume: 0.6 },
+    'yay': { path: 'audio/yay.mp3', volume: 0.4 },
     'meow': { path: 'audio/meow_short_quiet.wav', volume: 1.0 },
     'intro': { path: 'audio/intro.mp3', volume: 0.3 },
 };
