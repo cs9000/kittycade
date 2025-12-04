@@ -16,6 +16,8 @@ function initInput() {
 
 
         if (game.gameOver && !gameOverScreen.classList.contains('hidden')) {
+            clearTimeout(game.introMusicTimeoutId);
+            window.stopIntroSound();
             gameOverScreen.classList.add('hidden');
             window.initGame();
             return;
