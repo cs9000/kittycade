@@ -291,7 +291,9 @@ window.checkLevelUp = function() {
     const threshold = game.level * 5000;
     if (game.score >= threshold) {
         game.level++;
-        updateParticleSpeed(1 + (game.level - 1) * 0.9);
+        const maxSpeed = 20;
+        const newSpeed = 1 + (game.level - 1) * 1.5;
+        updateParticleSpeed(Math.min(newSpeed, maxSpeed));
         playSound('yay');
         game.baseSpeed = Math.max(50, game.initialSpeed - (game.level - 1) * 15);
         game.speed = game.baseSpeed;
