@@ -1,4 +1,5 @@
 let logicLoopId = null; 
+let particleContainer = null;
 let animationFrameId = null;
 let mouseLogicId = null;
 let featherTimerId = null; 
@@ -162,6 +163,11 @@ window.initGame = function(baseSpeed = 200) {
     game.started = true;
     game.lastFrameTime = performance.now(); // Initialize for logic updates
     game.lastRenderTime = performance.now(); // Initialize for rendering updates
+    
+    if (particleContainer) {
+        updateParticleSpeed(1);
+    }
+
     spawnFood();
     updateUI();
     draw();
@@ -285,6 +291,7 @@ window.checkLevelUp = function() {
     const threshold = game.level * 5000;
     if (game.score >= threshold) {
         game.level++;
+        updateParticleSpeed(1 + (game.level - 1) * 0.9);
         playSound('yay');
         game.baseSpeed = Math.max(50, game.initialSpeed - (game.level - 1) * 15);
         game.speed = game.baseSpeed;
@@ -418,6 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initInput();
     createLitterTexture();
     drawLegendItems();
+    initParticles();
 
     preloadSounds().then(() => {
         // Sounds loaded, hide loading and show click to start overlay
@@ -439,3 +447,83 @@ document.addEventListener('DOMContentLoaded', () => {
         window.playIntroSound();
     });
 });
+
+async function initParticles() {
+    // tsParticles is loaded globally via the script tag in index.html
+    if (typeof tsParticles === "undefined") {
+        console.error("tsParticles not loaded. Check the script tag in index.html.");
+        return;
+    }
+
+    particleContainer = await tsParticles.load({
+        id: "tsparticles",
+        options: {
+            particles: {
+                number: {
+                    value: 80,
+                    density: {
+                        enable: true,
+                        area: 800
+                    },
+                },
+                color: {
+                    value: "#ffffff",
+                },
+                shape: {
+                    type: "circle",
+                },
+                opacity: {
+                    value: 0.6,
+                },
+                size: {
+                    value: { min: 2, max: 4 },
+                },
+                links: {
+                    enable: true,
+                    distance: 150,
+                    color: "#ffffff",
+                    opacity: 0.5,
+                    width: 2,
+                },
+                move: {
+                    enable: true,
+                    speed: 1,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    outModes: {
+                        default: "out"
+                    },
+                },
+            },
+            interactivity: {
+                detectsOn: "window",
+                events: {
+                    onHover: {
+                        enable: false,
+                        mode: "repulse",
+                    },
+                    onClick: {
+                        enable: false,
+                        mode: "push",
+                    },
+                    resize: true,
+                },
+            },
+            detectRetina: true,
+            background: {
+                color: {
+                    value: "transparent"
+                }
+            }
+        },
+    });
+}
+
+function updateParticleSpeed(speed) {
+    if (particleContainer) {
+        const options = particleContainer.options;
+        options.particles.move.speed = speed;
+        particleContainer.refresh();
+    }
+}
