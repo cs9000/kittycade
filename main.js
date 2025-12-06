@@ -164,6 +164,10 @@ window.initGame = function(baseSpeed = 200) {
     game.lastFrameTime = performance.now(); // Initialize for logic updates
     game.lastRenderTime = performance.now(); // Initialize for rendering updates
     
+    // Reset background animation speed
+    game.backgroundAnimationDuration = 15;
+    document.body.style.animationDuration = '15s';
+
     if (particleContainer) {
         updateParticleSpeed(1);
     }
@@ -291,6 +295,8 @@ window.checkLevelUp = function() {
     const threshold = game.level * 5000;
     if (game.score >= threshold) {
         game.level++;
+        game.backgroundAnimationDuration *= 0.8;
+        document.body.style.animationDuration = game.backgroundAnimationDuration + 's';
         const maxSpeed = 20;
         const newSpeed = 1 + (game.level - 1) * 1.5;
         updateParticleSpeed(Math.min(newSpeed, maxSpeed));
