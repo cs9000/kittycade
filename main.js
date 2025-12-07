@@ -214,7 +214,8 @@ function showReady() {
     readyCountdown = 2000;
     readyCountdownStart = performance.now();
 
-    draw();
+    ctx.fillStyle = '#f0f0f0';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = 'rgba(0,0,0,0.7)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = '#4ade80';
