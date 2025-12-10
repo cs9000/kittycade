@@ -236,7 +236,7 @@ window.loseLife = function(msg) {
     game.lives--;
     playSound('lose_life');
     if (game.isTurbo) {
-        window.restoreNormalSpeed();
+        window.restoreNormalSpeed(true);
     }
     game.systemPaused = true;
     updatePauseState();
@@ -305,7 +305,7 @@ window.checkLevelUp = function() {
         game.baseSpeed = Math.max(50, game.initialSpeed - (game.level - 1) * 15);
         game.speed = game.baseSpeed;
         if (game.isTurbo) {
-            window.restoreNormalSpeed(); // Properly end turbo mode
+            window.restoreNormalSpeed(true); // Properly end turbo mode
         }
         
         game.systemPaused = true;
@@ -343,16 +343,19 @@ window.activateTurbo = function() {
     startTurboCountdown(turboCountdown);
 }
 
-window.restoreNormalSpeed = function() {
+window.restoreNormalSpeed = function(silent = false) {
     if (featherTimerId) { clearTimeout(featherTimerId); featherTimerId = null; }
     turboCountdown = 0;
 
     game.isTurbo = false;
     game.speed = game.baseSpeed; 
-    game.feedbackMessage = `Speed Restored.`;
-    game.feedbackStartTime = performance.now(); 
     
-    setTimeout(() => { game.feedbackMessage = null; game.feedbackStartTime = 0; }, 1000);
+    if (!silent) {
+        game.feedbackMessage = `Speed Restored.`;
+        game.feedbackStartTime = performance.now(); 
+        
+        setTimeout(() => { game.feedbackMessage = null; game.feedbackStartTime = 0; }, 1000);
+    }
 
     startMouseLogic(); 
 }
