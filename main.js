@@ -296,7 +296,7 @@ window.checkLevelUp = function() {
     const threshold = game.level * 5000;
     if (game.score >= threshold) {
         game.level++;
-        game.backgroundAnimationDuration *= 0.8;
+        game.backgroundAnimationDuration *= 0.75;
         document.body.style.animationDuration = game.backgroundAnimationDuration + 's';
         const maxSpeed = 20;
         const newSpeed = 1 + (game.level - 1) * 1.5;
