@@ -355,6 +355,12 @@ window.restoreNormalSpeed = function(silent = false) {
         game.feedbackStartTime = performance.now(); 
         
         setTimeout(() => { game.feedbackMessage = null; game.feedbackStartTime = 0; }, 1000);
+    } else {
+        // When silent, clear the ZOOMIES! message if it's the one present.
+        if (game.feedbackMessage === `ZOOMIES!`) {
+            game.feedbackMessage = null;
+            game.feedbackStartTime = 0;
+        }
     }
 
     startMouseLogic(); 
