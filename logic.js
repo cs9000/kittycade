@@ -69,12 +69,30 @@ function spawnCatnip() {
 
 function spawnDog() {
     if (game.dog || Math.random() > 0.3) return; // Less rare for playtesting
-    const empty = getEmptyCells();
-    if (empty.length > 0) {
-        const newPos = empty[Math.floor(Math.random() * empty.length)];
-        game.dog = { x: newPos.x, y: newPos.y, px: newPos.x, py: newPos.y };
-        playSound('dog_spawn');
+    
+    let empty = getEmptyCells();
+    if (empty.length === 0) return;
+
+    // Filter out cells directly in front of the cat to prevent unfair spawns
+    const head = game.snake[0];
+    const dir = game.direction;
+    const dangerZone = [
+        { x: head.x + dir.x, y: head.y + dir.y },
+        { x: head.x + (dir.x * 2), y: head.y + (dir.y * 2) }
+    ];
+
+    let safeCells = empty.filter(cell => 
+        !dangerZone.some(danger => danger.x === cell.x && danger.y === cell.y)
+    );
+
+    // If filtering leaves no cells (very unlikely), fall back to the original list
+    if (safeCells.length === 0) {
+        safeCells = empty;
     }
+
+    const newPos = safeCells[Math.floor(Math.random() * safeCells.length)];
+    game.dog = { x: newPos.x, y: newPos.y, px: newPos.x, py: newPos.y };
+    playSound('dog_spawn');
 }
 
 function moveMouse() {

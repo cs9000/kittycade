@@ -93,31 +93,9 @@ function drawLitterBoxGraphic(ctx, X, Y, W, H, isLegend) {
 
 function drawDog(ctx) {
     if (!game.dog) return;
-
     const centerX = (game.dog.x + 0.5) * CELL_SIZE;
     const centerY = (game.dog.y + 0.5) * CELL_SIZE;
-    const bodyWidth = CELL_SIZE * 0.8;
-    const bodyHeight = CELL_SIZE * 0.6;
-
-    // Body
-    ctx.fillStyle = '#A0522D'; // Sienna brown
-    ctx.beginPath();
-    ctx.roundRect(centerX - bodyWidth / 2, centerY - bodyHeight / 2, bodyWidth, bodyHeight, 8);
-    ctx.fill();
-
-    // Head
-    const headRadius = bodyWidth * 0.3;
-    ctx.fillStyle = '#8B4513'; // SaddleBrown
-    ctx.beginPath();
-    ctx.arc(centerX, centerY - bodyHeight * 0.3, headRadius, 0, Math.PI * 2);
-    ctx.fill();
-    
-    // Ears
-    ctx.fillStyle = '#A0522D';
-    ctx.beginPath();
-    ctx.arc(centerX - headRadius * 0.8, centerY - bodyHeight * 0.5, headRadius * 0.5, 0, Math.PI * 2);
-    ctx.arc(centerX + headRadius * 0.8, centerY - bodyHeight * 0.5, headRadius * 0.5, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.fillText('🐕', centerX, centerY);
 }
 
 function draw(interpolationFactor, renderDeltaTime) {
