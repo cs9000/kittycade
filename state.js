@@ -3,7 +3,7 @@ let game = {
     direction: {x: 0, y: -1},
     nextDirection: {x: 0, y: -1},
     inputBuffer: [],
-    food: null, litterBox: null, treat: null, catBed: null, mouse: null, catnip: null, 
+    food: null, litterBox: null, treat: null, catBed: null, mouse: null, catnip: null, dog: null, 
     score: 0,
     highScore: parseInt(localStorage.getItem('catSnakeHighScore') || '0', 10),
     lives: 3, level: 1, foodCount: 0,
@@ -14,6 +14,7 @@ let game = {
     lastRenderTime: 0,
     nextHeadPos: null, feedbackMessage: null, feedbackStartTime: 0, 
     zHead: null, zStream: [], zDirection: -1, shouldAnimateSleep: false,
+    arfHead: null, arfStream: [], arfDirection: -1, shouldAnimateArf: false,
     savedSnakeState: null,
     mouseLastLogicTime: 0,
     baseSpeed: 200,
@@ -40,6 +41,7 @@ function resetGameState() {
     game.catBed = null;
     game.mouse = null;
     game.catnip = null; 
+    game.dog = null;
     
     // Reset flags
     game.paused = false;
@@ -60,6 +62,10 @@ function resetGameState() {
     game.zStream = [];
     game.zDirection = -1;
     game.shouldAnimateSleep = false;
+    game.arfHead = null;
+    game.arfStream = [];
+    game.arfDirection = -1;
+    game.shouldAnimateArf = false;
     game.mouseLastLogicTime = 0;
     game.isTurbo = false;
 }

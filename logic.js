@@ -1,4 +1,5 @@
 let zIntervalId = null;
+let arfIntervalId = null;
 
 function getEmptyCells() {
     const empty = [];
@@ -19,7 +20,13 @@ function isOccupied(x, y) {
     if (game.catBed && game.catBed.x === x && game.catBed.y === y) return true;
     if (game.catnip && game.catnip.x === x && game.catnip.y === y) return true; 
     if (game.mouse && game.mouse.x === x && game.mouse.y === y) return true;
+    if (game.dog && game.dog.x === x && game.dog.y === y) return true;
     return false;
+}
+
+function isOccupiedByBody(x, y) {
+    // Check snake body, excluding the head
+    return game.snake.slice(1).some(seg => seg.x === x && seg.y === y);
 }
 
 function spawnFood() {
@@ -60,6 +67,16 @@ function spawnCatnip() {
     if (empty.length > 0) game.catnip = empty[Math.floor(Math.random() * empty.length)];
 }
 
+function spawnDog() {
+    if (game.dog || Math.random() > 0.3) return; // Less rare for playtesting
+    const empty = getEmptyCells();
+    if (empty.length > 0) {
+        const newPos = empty[Math.floor(Math.random() * empty.length)];
+        game.dog = { x: newPos.x, y: newPos.y, px: newPos.x, py: newPos.y };
+        playSound('dog_spawn');
+    }
+}
+
 function moveMouse() {
     if (!game.mouse) return;
     game.mouse.px = game.mouse.x;
@@ -78,6 +95,55 @@ function moveMouse() {
         game.mouse.x = newPos.x;
         game.mouse.y = newPos.y;
         game.mouse.lastMoveTimestamp = performance.now();
+    }
+}
+
+function moveDog() {
+    if (!game.dog) return;
+
+    const moveProbability = 0.05 * game.level; // Faster for playtesting
+    if (Math.random() > moveProbability) return;
+
+    game.dog.px = game.dog.x;
+    game.dog.py = game.dog.y;
+
+    const catHead = game.snake[0];
+    const dogPos = game.dog;
+
+    const dx = catHead.x - dogPos.x;
+    const dy = catHead.y - dogPos.y;
+
+    const dirs = [{x: 1, y: 0}, {x: -1, y: 0}, {x: 0, y: 1}, {x: 0, y: -1}];
+    
+    let bestMoves = [];
+    let validMoves = [];
+
+    for (const d of dirs) {
+        const nx = dogPos.x + d.x;
+        const ny = dogPos.y + d.y;
+
+        if (nx >= 0 && nx < GRID_SIZE && ny >= 0 && ny < GRID_SIZE && !isOccupiedByBody(nx, ny)) {
+            const move = {x: nx, y: ny};
+            validMoves.push(move);
+
+            const newDx = catHead.x - nx;
+            const newDy = catHead.y - ny;
+            if (Math.abs(newDx) < Math.abs(dx) || Math.abs(newDy) < Math.abs(dy)) {
+                bestMoves.push(move);
+            }
+        }
+    }
+
+    let finalMove = null;
+    if (bestMoves.length > 0) {
+        finalMove = bestMoves[Math.floor(Math.random() * bestMoves.length)];
+    } else if (validMoves.length > 0) {
+        finalMove = validMoves[Math.floor(Math.random() * validMoves.length)];
+    }
+    
+    if (finalMove) {
+        game.dog.x = finalMove.x;
+        game.dog.y = finalMove.y;
     }
 }
 
@@ -106,9 +172,36 @@ function animateSleep(head) {
     }, 300); 
 }
 
+function animateArf(head) {
+    game.arfHead = {x: head.x, y: head.y}; 
+    game.arfDirection = head.y < 2 ? 1 : -1; 
+    const MAX_ARF = 3;
+    let arfCount = 0;
+    
+    if (arfIntervalId) clearInterval(arfIntervalId);
+    playSound('bark');
+    arfIntervalId = setInterval(() => {
+        game.arfStream.push({ 
+            text: 'Arf!',
+            offsetY: 0, offsetX: 0, startOffsetX: (Math.random() * 20 - 10) * game.arfDirection, alpha: 1
+        });
+        arfCount++;
+        if (arfCount >= MAX_ARF) {
+            clearInterval(arfIntervalId);
+            arfIntervalId = null;
+            setTimeout(() => {
+                game.arfHead = null;
+                game.arfStream = []; 
+            }, 1000); 
+        }
+    }, 300); 
+}
+
 function updateGameLogic() {
     if (game.gameOver || game.paused || game.animating) return; 
     if (game.snake.length === 0) { window.loseLife("Fatal error: Cat vanished!"); return; }
+
+    moveDog();
 
     if (game.inputBuffer.length > 0) {
         const bufferedDir = game.inputBuffer.shift();
@@ -135,6 +228,17 @@ function updateGameLogic() {
         game.nextHeadPos = null; 
         return;
     }
+    if (game.dog && tx === game.dog.x && ty === game.dog.y) {
+        if (game.isTurbo) {
+            game.score += 500;
+            game.dog = null;
+            playSound('dog_get');
+        } else {
+            window.loseLife("Don't mess with the dog!");
+            game.nextHeadPos = null; 
+            return;
+        }
+    }
 
     let isGrowing = false;
     let isShrinking = false;
@@ -145,7 +249,7 @@ function updateGameLogic() {
         playSound('food');
         spawnFood();
         if (Math.random() < 0.33) spawnLitterBox(); 
-        spawnTreat(); spawnCatBed(); spawnMouse(); spawnCatnip();
+        spawnTreat(); spawnCatBed(); spawnMouse(); spawnCatnip(); spawnDog();
         isGrowing = true;
     }
     else if (game.treat && tx === game.treat.x && ty === game.treat.y) {
@@ -155,7 +259,7 @@ function updateGameLogic() {
         game.score += 200; game.catBed = null;
         playSound('bed');
         game.shouldAnimateSleep = true; 
-        if (game.isTurbo) window.restoreNormalSpeed(); 
+        if (game.isTurbo) window.restoreNormalSpeed(true); 
     }
     else if (game.litterBox && tx === game.litterBox.x && ty === game.litterBox.y) {
         game.score += 100; isShrinking = true; game.litterBox = null;
@@ -180,6 +284,15 @@ function updateGameLogic() {
     game.snake[0].x = tx;
     game.snake[0].y = ty;
 
+    // Dog warning radius
+    if (game.dog && !game.arfHead) {
+        const dx = Math.abs(game.snake[0].x - game.dog.x);
+        const dy = Math.abs(game.snake[0].y - game.dog.y);
+        if ((dx <= 1 && dy <= 1) && (dx+dy !== 0)) { // 1-cell radius including diagonals
+             game.shouldAnimateArf = true;
+        }
+    }
+
     // Handle Length
     if (isGrowing) {
         const last = game.snake[game.snake.length - 1];
@@ -195,6 +308,10 @@ function updateGameLogic() {
     if (game.shouldAnimateSleep) {
         animateSleep(game.snake[0]); 
         game.shouldAnimateSleep = false;
+    }
+    if (game.shouldAnimateArf) {
+        animateArf(game.dog);
+        game.shouldAnimateArf = false;
     }
 
     if (game.score > game.highScore) {

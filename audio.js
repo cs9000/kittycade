@@ -11,6 +11,9 @@ const sounds = {
     'yay': { path: 'audio/yay.mp3', volume: 0.4 },
     'meow': { path: 'audio/meow_short_quiet.wav', volume: 1.0 },
     'intro': { path: 'audio/intro.mp3', volume: 0.3 },
+    'dog_spawn': { path: 'audio/mouse.mp3', volume: 0.5 },
+    'bark': { path: 'audio/lose_life2.wav', volume: 0.4 },
+    'dog_get': { path: 'audio/yarn.wav', volume: 0.7 },
 };
 
 const audioCache = {};
