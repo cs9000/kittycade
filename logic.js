@@ -29,6 +29,18 @@ function isOccupiedByBody(x, y) {
     return game.snake.slice(1).some(seg => seg.x === x && seg.y === y);
 }
 
+function isOccupiedForDogMove(x, y) {
+    // Dog can't move onto items or the cat's body, but can move onto the head (lethal)
+    if (game.snake.slice(1).some(seg => seg.x === x && seg.y === y)) return true;
+    if (game.food && game.food.x === x && game.food.y === y) return true;
+    if (game.litterBox && game.litterBox.x === x && game.litterBox.y === y) return true;
+    if (game.treat && game.treat.x === x && game.treat.y === y) return true;
+    if (game.catBed && game.catBed.x === x && game.catBed.y === y) return true;
+    if (game.catnip && game.catnip.x === x && game.catnip.y === y) return true; 
+    if (game.mouse && game.mouse.x === x && game.mouse.y === y) return true;
+    return false;
+}
+
 function spawnFood() {
     const empty = getEmptyCells();
     if (empty.length > 0) game.food = empty[Math.floor(Math.random() * empty.length)];
@@ -140,7 +152,7 @@ function moveDog() {
         const nx = dogPos.x + d.x;
         const ny = dogPos.y + d.y;
 
-        if (nx >= 0 && nx < GRID_SIZE && ny >= 0 && ny < GRID_SIZE && !isOccupiedByBody(nx, ny)) {
+        if (nx >= 0 && nx < GRID_SIZE && ny >= 0 && ny < GRID_SIZE && !isOccupiedForDogMove(nx, ny)) {
             const move = {x: nx, y: ny};
             validMoves.push(move);
 
