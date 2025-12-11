@@ -80,7 +80,7 @@ function spawnCatnip() {
 }
 
 function spawnDog() {
-    if (game.dog || Math.random() > 0.3) return; // Less rare for playtesting
+    if (game.dog || Math.random() > 0.24) return; // Less rare for playtesting
     
     let empty = getEmptyCells();
     if (empty.length === 0) return;
@@ -90,7 +90,8 @@ function spawnDog() {
     const dir = game.direction;
     const dangerZone = [
         { x: head.x + dir.x, y: head.y + dir.y },
-        { x: head.x + (dir.x * 2), y: head.y + (dir.y * 2) }
+        { x: head.x + (dir.x * 2), y: head.y + (dir.y * 2) },
+        { x: head.x + (dir.x * 3), y: head.y + (dir.y * 3) }
     ];
 
     let safeCells = empty.filter(cell => 
