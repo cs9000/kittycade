@@ -74,13 +74,13 @@ function spawnMouse() {
 }
 
 function spawnCatnip() {
-    if (game.catnip || Math.random() > 0.05) return; 
+    if (game.catnip || Math.random() > 0.1) return; 
     const empty = getEmptyCells();
     if (empty.length > 0) game.catnip = empty[Math.floor(Math.random() * empty.length)];
 }
 
 function spawnDog() {
-    if (game.dog || Math.random() > 0.24) return; // Less rare for playtesting
+    if (game.dog || Math.random() > 0.1) return;
     
     let empty = getEmptyCells();
     if (empty.length === 0) return;
