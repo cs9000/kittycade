@@ -1,94 +1,82 @@
+
+
 let litterTextureCanvas = null;
 
 function createLitterTexture() {
+    const CELL_SIZE = 40; // Base size for calculation
+    const padding = 6;
+    const sandW = CELL_SIZE - (padding * 2) - 8;
+    const sandH = CELL_SIZE - (padding * 2) - 8;
+
     litterTextureCanvas = document.createElement('canvas');
-    litterTextureCanvas.width = CELL_SIZE;
-    litterTextureCanvas.height = CELL_SIZE;
+    litterTextureCanvas.width = sandW;
+    litterTextureCanvas.height = sandH;
     const tCtx = litterTextureCanvas.getContext('2d');
+
+    // We only need to draw the sand and dots to the texture
+    tCtx.fillStyle = '#F5CBA7'; // Sand color
+    tCtx.beginPath();
+    if (tCtx.roundRect) {
+        tCtx.roundRect(0, 0, sandW, sandH, 4); // Draw at (0,0) in the small canvas
+    } else {
+        tCtx.rect(0, 0, sandW, sandH);
+    }
+    tCtx.fill();
+
+    // Add Texture (Grains of litter)
+    tCtx.fillStyle = '#D35400'; // Darker orange/brown specks
+    for (let i = 0; i < 8; i++) {
+        const dotX = Math.random() * sandW;
+        const dotY = Math.random() * sandH;
+        tCtx.fillRect(Math.floor(dotX), Math.floor(dotY), 2, 2);
+    }
     
-    tCtx.clearRect(0, 0, CELL_SIZE, CELL_SIZE); 
-    tCtx.fillStyle = '#bcaaa4'; 
-    tCtx.fillRect(0, 0, CELL_SIZE, CELL_SIZE);
-    
-    tCtx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-    for (let i = 0; i < 30; i++) {
-        const rx = 1 + Math.random() * (CELL_SIZE - 2);
-        const ry = 1 + Math.random() * (CELL_SIZE - 2);
-        tCtx.beginPath();
-        tCtx.arc(rx, ry, 1.5, 0, Math.PI * 2);
-        tCtx.fill();
+    tCtx.fillStyle = '#FDF2E9'; // Lighter specks
+    for (let i = 0; i < 5; i++) {
+        const dotX = Math.random() * sandW;
+        const dotY = Math.random() * sandH;
+        tCtx.fillRect(Math.floor(dotX), Math.floor(dotY), 2, 2);
     }
 }
 
+
 function drawLitterBoxGraphic(ctx, X, Y, W, H, isLegend) {
-    const BOX_COLOR = '#7c4dff';        
-    const SHADOW_COLOR = '#673ab7';     
-    const HIGHLIGHT_COLOR = '#9575cd';  
-    const DOOR_COLOR = '#424242';       
+    ctx.save();
+    const boxX = X;
+    const boxY = Y;
+    const CELL_SIZE = W; // Assuming W and H are the same
+    const padding = 6; 
+
+    // 1. Draw the Tray (Blue Plastic Container)
+    const grad = ctx.createLinearGradient(boxX, boxY, boxX, boxY + CELL_SIZE);
+    grad.addColorStop(0, '#5DADE2');
+    grad.addColorStop(1, '#3498DB');
     
-    const PADDING = W * 0.1;            
-    const BOX_X = X + PADDING;
-    const BOX_Y = Y + PADDING / 2;      
-    const BOX_W = W - 2 * PADDING;
-    const BOX_H = H - PADDING;          
-    const ROUNDNESS = BOX_W * 0.15;     
-
-    const DOOR_WIDTH = BOX_W * 0.45;
-    const DOOR_HEIGHT = BOX_H * 0.45;
-    const DOOR_X = BOX_X + (BOX_W - DOOR_WIDTH) / 2;
-    const DOOR_Y = BOX_Y + BOX_H * 0.5; 
-
-    ctx.fillStyle = BOX_COLOR;
-    ctx.strokeStyle = SHADOW_COLOR;
-    ctx.lineWidth = 2;
+    ctx.fillStyle = grad;
     ctx.beginPath();
-    ctx.roundRect(BOX_X, BOX_Y, BOX_W, BOX_H, ROUNDNESS);
-    ctx.fill();
-    ctx.stroke();
-
-    const doorOpeningX = DOOR_X;
-    const doorOpeningY = DOOR_Y;
-    const doorOpeningW = DOOR_WIDTH;
-    const doorOpeningH = DOOR_HEIGHT;
     
-    ctx.fillStyle = '#f0f0f0'; 
-    ctx.beginPath();
-    ctx.roundRect(doorOpeningX, doorOpeningY, doorOpeningW, doorOpeningH, doorOpeningW * 0.1);
-    ctx.fill();
-
-    const litterX = doorOpeningX;
-    const litterY = doorOpeningY + doorOpeningH * 0.7; 
-    const litterW = doorOpeningW;
-    const litterH = doorOpeningH * 0.3; 
-    
-    ctx.fillStyle = '#bcaaa4';
-    ctx.fillRect(litterX, litterY, litterW, litterH);
-
-    if (litterTextureCanvas) {
-        ctx.save();
-        ctx.beginPath();
-        ctx.rect(litterX, litterY, litterW, litterH);
-        ctx.clip();
-        ctx.drawImage(litterTextureCanvas, litterX, litterY - (CELL_SIZE - litterH)); 
-        ctx.restore();
+    if (ctx.roundRect) {
+        ctx.roundRect(boxX + padding, boxY + padding, CELL_SIZE - (padding * 2), CELL_SIZE - (padding * 2), 8);
+    } else {
+        ctx.rect(boxX + padding, boxY + padding, CELL_SIZE - (padding * 2), CELL_SIZE - (padding * 2));
     }
-
-    const flapHeight = H * 0.04;
-    ctx.fillStyle = DOOR_COLOR;
-    ctx.beginPath();
-    ctx.roundRect(DOOR_X, DOOR_Y, DOOR_WIDTH, flapHeight, DOOR_WIDTH * 0.05);
-    ctx.fill();
-    
-    ctx.fillStyle = HIGHLIGHT_COLOR;
-    ctx.beginPath();
-    ctx.roundRect(BOX_X, BOX_Y, BOX_W, BOX_H * 0.1, [ROUNDNESS, ROUNDNESS, 0, 0]);
     ctx.fill();
 
-    ctx.strokeStyle = SHADOW_COLOR;
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.roundRect(doorOpeningX, doorOpeningY, doorOpeningW, doorOpeningH, doorOpeningW * 0.1);
+    // Border for the tray
+    ctx.strokeStyle = '#2874A6';
+    ctx.lineWidth = 2;
     ctx.stroke();
+
+    // 2. Draw the pre-rendered Sand and Texture
+    if (litterTextureCanvas) {
+        const sandX = boxX + padding + 4;
+        const sandY = boxY + padding + 4;
+        const sandW = CELL_SIZE - (padding * 2) - 8;
+        const sandH = CELL_SIZE - (padding * 2) - 8;
+        ctx.drawImage(litterTextureCanvas, sandX, sandY, sandW, sandH);
+    }
+    
+    ctx.restore();
 }
 
 function drawDog(ctx) {

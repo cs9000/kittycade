@@ -175,7 +175,7 @@ window.initGame = function(baseSpeed = 200) {
     spawnFood();
     updateUI();
     draw();
-    createLitterTexture(); // Initialize litter texture here
+    createLitterTexture();
     drawLegendItems();    // Draw legend items after canvas and ctx are ready
     showReady();
 }
