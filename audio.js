@@ -12,7 +12,7 @@ const sounds = {
     'meow': { path: 'audio/meow_short_quiet.wav', volume: 1.0 },
     'intro': { path: 'audio/intro.mp3', volume: 0.3 },
     'dog_spawn': { path: 'audio/dog-spawn.wav', volume: 0.5 },
-    'bark': { path: 'audio/short-dog-bark.wav', volume: 0.4 },
+    'bark': { path: 'audio/double-bark.mp3', volume: 0.4 },
     'dog_get': { path: 'audio/yarn.wav', volume: 0.7 },
 };
 
