@@ -31,6 +31,7 @@ This section outlines non-negotiable rules for interacting with this project.
 
 - **DO NOT** run web servers (e.g., `python -m `http.server``, `npx serve`, etc.).
 - **DO NOT** attempt to install new packages or dependencies (e.g., `npm install`).
+- **DO NOT** use git commands to commit files. The user will do that.
 
 ### Allowed Tools & Workflows
 
