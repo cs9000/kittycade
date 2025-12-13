@@ -128,31 +128,7 @@ function draw(interpolationFactor, renderDeltaTime) {
     if (game.treat) {
         const centerX = (game.treat.x + 0.5) * CELL_SIZE;
         const centerY = (game.treat.y + 0.5) * CELL_SIZE;
-        const radius = (CELL_SIZE / 2) - 8;
-        
-        ctx.fillStyle = '#e74c3c';
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-        ctx.fill();
-        
-        ctx.strokeStyle = '#c0392b';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.moveTo(centerX - radius * 0.7, centerY - radius * 0.7);
-        ctx.lineTo(centerX + radius * 0.7, centerY + radius * 0.7);
-        ctx.moveTo(centerX - radius * 0.7, centerY + radius * 0.7);
-        ctx.lineTo(centerX + radius * 0.7, centerY - radius * 0.7);
-        ctx.moveTo(centerX - radius, centerY);
-        ctx.lineTo(centerX + radius, centerY);
-        ctx.moveTo(centerX, centerY - radius);
-        ctx.lineTo(centerX, centerY + radius);
-        ctx.stroke();
-        
-        ctx.strokeStyle = '#ff6b6b';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(centerX - radius * 0.3, centerY - radius * 0.3, radius * 0.2, 0, Math.PI * 1.5);
-        ctx.stroke();
+        ctx.fillText('🧶', centerX, centerY);
     }
 
     if (game.mouse) {
@@ -426,12 +402,9 @@ function drawLegendItems() {
     const yarnLegend = document.getElementById('yarnLegend');
     if (yarnLegend) {
         const ctx = yarnLegend.getContext('2d');
-        const cx = 20, cy = 20, r = 12;
-        ctx.fillStyle = '#e74c3c'; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.fill();
-        ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.moveTo(cx-r*0.7, cy-r*0.7); ctx.lineTo(cx+r*0.7, cy+r*0.7);
-        ctx.moveTo(cx-r*0.7, cy+r*0.7); ctx.lineTo(cx+r*0.7, cy-r*0.7);
-        ctx.stroke();
+        ctx.font = 'bold 32px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('🧶', 20, 20);
     }
 }

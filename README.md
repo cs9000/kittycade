@@ -15,6 +15,6 @@ The game features various items with different effects:
 *   **Food (🐟):** +100 points, cat grows.
 *   **Litter Box:** -100 points, cat shrinks (3 segments).
 *   **Mischievous Mouse (🐀):** +500 points, cat grows.
-*   **Treat (300 pts):** Score Bonus.
+*   **Yarn ball (🧶):** +300 points, Score Bonus.
 *   **Cat Bed (🛏️):** +200 points, Score Bonus & Nap (brief invulnerability).
 *   **Catnip (🌿):** +1000 points, Score & Turbo Speed!
