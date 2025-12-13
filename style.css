@@ -105,10 +105,13 @@ button:hover { background: #5568d3; }
     max-height: 90vh;
     overflow-y: auto;
     touch-action: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 #startScreen h1, #gameOverScreen h1 {
     color: #667eea;
-    margin-bottom: 10px;
+    margin: 0;
     font-size: 32px;
 }
 #startScreen p, #gameOverScreen p {
@@ -120,7 +123,8 @@ button:hover { background: #5568d3; }
     background: #f8f9ff;
     padding: 15px;
     border-radius: 10px;
-    margin: 10px 0 10px;
+    margin: 0;
+    width: 100%;
 }
 .instructions p:last-child {
     margin-bottom: 0;
@@ -129,19 +133,18 @@ button:hover { background: #5568d3; }
     background: #f8f9ff;
     padding: 15px;
     border-radius: 10px;
-    margin: 0 auto 10px;
+    margin: 0;
+    width: 100%;
     display: grid;
     grid-template-columns: 40px auto;
-    gap: 8px 12px;
+    grid-auto-rows: 40px;
+    gap: 4px 12px;
     text-align: left;
+    align-items: center;
 }
 .legend-item {
     font-size: 22px;
     text-align: center;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 .litter-box-legend { 
     width: 30px; 
@@ -151,9 +154,6 @@ button:hover { background: #5568d3; }
     color: #555;
     font-weight: bold;
     font-size: 13px;
-    height: 30px;
-    display: flex;
-    align-items: center;
 }
 .hidden { display: none !important; }
 #pauseOverlay {
@@ -324,19 +324,14 @@ button:hover { background: #5568d3; }
     .legend {
         margin: 0 auto 5px;
         padding: 10px;
-        gap: 8px 8px;
+        gap: 4px 8px;
+        grid-auto-rows: 36px;
     }
     .legend-item {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 30px;
+        text-align: center;
     }
     .legend-text {
         font-size: 12px;
-        height: 30px;
-        display: flex;
-        align-items: center;
     }
     .start-buttons {
         margin-top: 10px;
