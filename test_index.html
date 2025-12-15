@@ -7,19 +7,41 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="gameContainer">
-        <div id="ui">
-            <div id="score">Score: 0</div>
-            <div id="level">Level: 1</div>
-            <div id="lives">Lives: 🐱🐱🐱</div>
-            <div id="controls">
-                <button id="muteBtn">🔊 Sound</button>
-                <button id="pauseBtn">⏸ Pause</button>
+    <div id="main-content-wrapper">
+        <div id="gameContainer">
+            <div id="ui">
+                <div id="score"><span></span><span></span></div>
+                <div id="level-lives-container">
+                    <div id="level">Level: 1</div>
+                    <div id="lives">Lives: 🐱🐱🐱</div>
+                </div>
+                <div id="controls">
+                    <button id="muteBtn">🔊</button>
+                    <button id="pauseBtn">⏸</button>
+                </div>
+            </div>
+            <canvas id="gameCanvas" width="600" height="600"></canvas>
+        </div>
+        <div id="virtual-dpad" class="dpad-container">
+            <div class="dpad-row">
+                <button id="btn-up" class="dpad-btn">▲</button>
+            </div>
+            <div class="dpad-row middle">
+                <button id="btn-left" class="dpad-btn">◀</button>
+                <div class="dpad-gap"></div>
+                <button id="btn-right" class="dpad-btn">▶</button>
+            </div>
+            <div class="dpad-row">
+                <button id="btn-down" class="dpad-btn">▼</button>
             </div>
         </div>
-        <canvas id="gameCanvas" width="600" height="600"></canvas>
+    </div>
         
-        <div id="startScreen">
+        <div id="clickToStartOverlay">
+            <h1>Click to Start</h1>
+        </div>
+        
+        <div id="startScreen" class="hidden">
             <h1>🐱 Kittycade</h1>
             <div class="instructions">
                 <p><strong>Get food and catch the mouse to grow.<br>Use the litter box to shrink.</strong></p>
@@ -41,7 +63,10 @@
                 <div class="legend-item">🐕</div>
                 <div class="legend-text">Dog (500 pts) - Tip: use catnip!</div>
             </div>
-            <button id="startBtn">Start Game</button>
+            <div class="start-buttons">
+                <button id="startNormalBtn">Normal</button>
+                <button id="startRelaxedBtn">Relaxed</button>
+            </div>
         </div>
         
         <div id="gameOverScreen" class="hidden">
@@ -52,9 +77,12 @@
         </div>
         
         <div id="pauseOverlay" class="hidden">PAUSED</div>
-    </div>
+        <div id="loadingOverlay">
+            <h1>Loading...</h1>
+        </div>
     
     <script src="constants.js"></script>
+    <script src="audio.js"></script>
     <script src="state.js"></script>
     <script src="renderer.js"></script>
     <script src="logic.js"></script>
