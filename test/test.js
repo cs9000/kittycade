@@ -1,7 +1,31 @@
 function runTests() {
     console.log("Running tests...");
     testTurboResetOnLifeLost();
+    testDogCollisionOnCatMove();
     console.log("Tests finished.");
+}
+
+function testDogCollisionOnCatMove() {
+    console.log("testDogCollisionOnCatMove: START");
+
+    // 1. Setup
+    window.initGame();
+    game.started = true;
+    game.lives = 3;
+    game.isTurbo = false;
+    game.level = 0; // Ensures dog doesn't move randomly during the test
+    
+    const catHead = { x: 10, y: 10 };
+    game.snake = [{ ...catHead, px: 9, py: 10 }]; // Place cat
+    game.dog = { x: 10, y: 10, px: 9, py: 10 };   // Place dog directly on cat
+
+    // 2. Action
+    updateGameLogic(); // Manually trigger game logic
+    
+    // 3. Assertions
+    console.assert(game.lives === 2, `Lives should be 2, but are ${game.lives}`);
+    
+    console.log("testDogCollisionOnCatMove: END");
 }
 
 function testTurboResetOnLifeLost() {

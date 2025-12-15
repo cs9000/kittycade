@@ -234,6 +234,13 @@ function updateGameLogic() {
 
     moveDog();
 
+    // Check for dog collision with the cat's CURRENT position
+    const head = game.snake[0];
+    if (game.dog && !game.isTurbo && game.dog.x === head.x && game.dog.y === head.y) {
+        window.loseLife("The dog caught you!");
+        return; // Return immediately since the game state is now 'losing a life'
+    }
+
     if (game.inputBuffer.length > 0) {
         const bufferedDir = game.inputBuffer.shift();
         if ((bufferedDir.x !== 0 && game.direction.x === 0) || 
