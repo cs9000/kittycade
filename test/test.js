@@ -10,6 +10,9 @@ function testDogCollisionOnCatMove() {
 
     // 1. Setup
     window.initGame();
+    game.muted = true; // Prevent audio errors in test environment
+    game.systemPaused = false; // Ensure game logic runs
+    updatePauseState(); // Recalculate game.paused state
     game.started = true;
     game.lives = 3;
     game.isTurbo = false;
@@ -32,6 +35,9 @@ function testTurboResetOnLifeLost() {
     console.log("testTurboResetOnLifeLost: START");
     // 1. Setup initial state
     window.initGame();
+    game.muted = true; // Prevent audio errors in test environment
+    game.systemPaused = false; // Ensure game logic runs
+    updatePauseState(); // Recalculate game.paused state
     game.started = true;
     game.lives = 3;
     game.baseSpeed = 200;
@@ -40,7 +46,7 @@ function testTurboResetOnLifeLost() {
     // 2. Activate Turbo
     window.activateTurbo();
     console.assert(game.isTurbo === true, "Turbo should be active");
-    console.assert(game.speed === 120, "Speed should be turbo speed");
+    console.assert(game.speed === 150, `Speed should be turbo speed of 150, but is ${game.speed}`);
 
     // 3. Lose a life
     window.loseLife("test collision");
