@@ -1,5 +1,5 @@
 # Project Context
-You are an AI assistant helping with the kittycade project. You are running as an extension inside a codespace on github. You can edit files but you cannot launch a web server with npm or run python or control a browser.
+You are an AI assistant helping with the kittycade project. 
 
 ## Key Architecture
 - This project is in the style of a classic arcade game like "Snake"
@@ -29,8 +29,6 @@ This section outlines non-negotiable rules for interacting with this project.
 
 ### Forbidden Commands & Actions
 
-- **DO NOT** run web servers (e.g., `python -m `http.server``, `npx serve`, etc.).
-- **DO NOT** attempt to install new packages or dependencies (e.g., `npm install`).
 - **DO NOT** use git commands to commit files. The user will do that.
 
 ### Allowed Tools & Workflows
