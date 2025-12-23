@@ -33,6 +33,9 @@ function resetGameState() {
     game.direction = {x: 0, y: -1};
     game.nextDirection = {x: 0, y: -1};
     game.inputBuffer = [];
+
+    game.savedSnakeState = null;
+    game.savedLag = null;
     
     // Clear items
     game.food = null;

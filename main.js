@@ -550,50 +550,36 @@ document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
         // --- TAB HIDDEN ---
         
-        // 1. Pause the Game Logic
-        // We use 'systemPaused' so we don't overwrite the user's manual pause state.
-        if (game.started && !game.gameOver) {
-            game.systemPaused = true;
-            updatePauseState();
-        }
-
-        // 2. Silence the Music
-        // The intro music is the main culprit for background noise.
-        // We stop it here.
-        // And, cancel the pending music timer so it doesn't fire while hidden
+        // 1. Stop Music immediately
         if (game.introMusicTimeoutId) {
             clearTimeout(game.introMusicTimeoutId);
             game.introMusicTimeoutId = null;
         }
         window.stopIntroSound();
 
+        // 2. Force "User Pause" to freeze everything
+        // We save the user's previous pause state so we can restore it later.
+        if (!game.gameOver) {
+            game.wasPausedByTab = game.userPaused; // Remember if the user had it paused
+            game.userPaused = true;                // Force pause
+            updatePauseState();                    // This stops ALL timers and saves state
+        }
+
     } else {
         // --- TAB VISIBLE ---
 
-        // 1. Resume the Game Logic
-        // Only unpause if the USER didn't pause it themselves.
-        if (game.started && !game.gameOver && game.systemPaused) {
-            game.systemPaused = false;
-            
-            // CRITICAL: reset the clock to prevent the "Fast Forward" crash
-            // (updatePauseState handles this reset internally, but good to be explicit)
-            game.lastFrameTime = performance.now(); 
-            game.lag = 0;
-            
-            updatePauseState();
-            
-            // Optional: Show "Ready!" again so they don't die instantly
-            showReady(); 
+        // 1. Restore "User Pause" state
+        if (!game.gameOver && game.wasPausedByTab !== undefined) {
+            game.userPaused = game.wasPausedByTab; // Restore previous state
+            updatePauseState();                    // This resumes timers/logic if appropriate
         }
 
-        // 2. Resume Music (If applicable)
-        // If we are on the Start Screen or Game Over screen, the music should be playing.
+        // 2. Resume Music (if on menu screens)
         const startScreen = document.getElementById('startScreen');
         const gameOverScreen = document.getElementById('gameOverScreen');
-        
-        // If either screen is visible (not hidden), restart the music
         if (!startScreen.classList.contains('hidden') || !gameOverScreen.classList.contains('hidden')) {
              window.playIntroSound();
         }
     }
 });
+
