@@ -560,6 +560,11 @@ document.addEventListener("visibilitychange", () => {
         // 2. Silence the Music
         // The intro music is the main culprit for background noise.
         // We stop it here.
+        // And, cancel the pending music timer so it doesn't fire while hidden
+        if (game.introMusicTimeoutId) {
+            clearTimeout(game.introMusicTimeoutId);
+            game.introMusicTimeoutId = null;
+        }
         window.stopIntroSound();
 
     } else {
