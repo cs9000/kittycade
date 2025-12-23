@@ -5,18 +5,8 @@ You are an AI assistant helping with the kittycade project.
 - This project is in the style of a classic arcade game like "Snake"
 - This project uses html, javascript, and css. No frameworks are used.
 
-## Automated Context
-@index.html
-@README.md
-@constants.js
-@input.js
-@logic.js
-@main.js
-@renderer.js
-@state.js
-@style.css
-@test
-@audio.js
+## Key Files
+
 
 # Gemini Directives for Kittycade Project
 
@@ -33,6 +23,5 @@ This section outlines non-negotiable rules for interacting with this project.
 
 ### Allowed Tools & Workflows
 
-- All changes should be verifiable by reading the code or by running tests if they exist.
-- Only use the tools provided.
+
 

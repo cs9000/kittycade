@@ -545,3 +545,50 @@ function updateParticleSpeed(speed) {
         particleContainer.refresh();
     }
 }
+
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+        // --- TAB HIDDEN ---
+        
+        // 1. Pause the Game Logic
+        // We use 'systemPaused' so we don't overwrite the user's manual pause state.
+        if (game.started && !game.gameOver) {
+            game.systemPaused = true;
+            updatePauseState();
+        }
+
+        // 2. Silence the Music
+        // The intro music is the main culprit for background noise.
+        // We stop it here.
+        window.stopIntroSound();
+
+    } else {
+        // --- TAB VISIBLE ---
+
+        // 1. Resume the Game Logic
+        // Only unpause if the USER didn't pause it themselves.
+        if (game.started && !game.gameOver && game.systemPaused) {
+            game.systemPaused = false;
+            
+            // CRITICAL: reset the clock to prevent the "Fast Forward" crash
+            // (updatePauseState handles this reset internally, but good to be explicit)
+            game.lastFrameTime = performance.now(); 
+            game.lag = 0;
+            
+            updatePauseState();
+            
+            // Optional: Show "Ready!" again so they don't die instantly
+            showReady(); 
+        }
+
+        // 2. Resume Music (If applicable)
+        // If we are on the Start Screen or Game Over screen, the music should be playing.
+        const startScreen = document.getElementById('startScreen');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        
+        // If either screen is visible (not hidden), restart the music
+        if (!startScreen.classList.contains('hidden') || !gameOverScreen.classList.contains('hidden')) {
+             window.playIntroSound();
+        }
+    }
+});
