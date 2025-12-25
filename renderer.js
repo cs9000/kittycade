@@ -122,7 +122,19 @@ function draw(interpolationFactor, renderDeltaTime) {
     }
     if (game.litterBox) drawLitterBoxGraphic(ctx, game.litterBox.x * CELL_SIZE, game.litterBox.y * CELL_SIZE, CELL_SIZE, CELL_SIZE, false);
     if (game.catBed) ctx.fillText('🛏️', (game.catBed.x + 0.5) * CELL_SIZE, (game.catBed.y + 0.5) * CELL_SIZE);
-    if (game.catnip) ctx.fillText('🌿', (game.catnip.x + 0.5) * CELL_SIZE, (game.catnip.y + 0.5) * CELL_SIZE);
+    if (game.catnip) {
+        const pulseScale = 1 + Math.sin(Date.now() / 100) * 0.15; // Faster pulse
+        const centerX = (game.catnip.x + 0.5) * CELL_SIZE;
+        const centerY = (game.catnip.y + 0.5) * CELL_SIZE;
+
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.scale(pulseScale, pulseScale);
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('🌿', 0, 0);
+        ctx.restore();
+    }
     if (game.dog) drawDog(ctx);
 
     if (game.treat) {
