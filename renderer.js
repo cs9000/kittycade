@@ -30,7 +30,7 @@ function createLitterTexture() {
         const dotY = Math.random() * sandH;
         tCtx.fillRect(Math.floor(dotX), Math.floor(dotY), 2, 2);
     }
-    
+
     tCtx.fillStyle = '#FDF2E9'; // Lighter specks
     for (let i = 0; i < 5; i++) {
         const dotX = Math.random() * sandW;
@@ -45,16 +45,16 @@ function drawLitterBoxGraphic(ctx, X, Y, W, H, isLegend) {
     const boxX = X;
     const boxY = Y;
     const CELL_SIZE = W; // Assuming W and H are the same
-    const padding = 6; 
+    const padding = 6;
 
     // 1. Draw the Tray (Blue Plastic Container)
     const grad = ctx.createLinearGradient(boxX, boxY, boxX, boxY + CELL_SIZE);
     grad.addColorStop(0, '#5DADE2');
     grad.addColorStop(1, '#3498DB');
-    
+
     ctx.fillStyle = grad;
     ctx.beginPath();
-    
+
     if (ctx.roundRect) {
         ctx.roundRect(boxX + padding, boxY + padding, CELL_SIZE - (padding * 2), CELL_SIZE - (padding * 2), 8);
     } else {
@@ -75,7 +75,7 @@ function drawLitterBoxGraphic(ctx, X, Y, W, H, isLegend) {
         const sandH = CELL_SIZE - (padding * 2) - 8;
         ctx.drawImage(litterTextureCanvas, sandX, sandY, sandW, sandH);
     }
-    
+
     ctx.restore();
 }
 
@@ -89,7 +89,7 @@ function drawDog(ctx) {
 function draw(interpolationFactor, renderDeltaTime) {
     ctx.fillStyle = '#f0f0f0';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
+
     ctx.strokeStyle = '#e0e0e0';
     ctx.lineWidth = 1;
     for (let i = 0; i <= GRID_SIZE; i++) {
@@ -102,12 +102,24 @@ function draw(interpolationFactor, renderDeltaTime) {
         ctx.lineTo(canvas.width, i * CELL_SIZE);
         ctx.stroke();
     }
-    
+
     ctx.font = 'bold 32px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    
-    if (game.food) ctx.fillText('🐟', (game.food.x + 0.5) * CELL_SIZE, (game.food.y + 0.5) * CELL_SIZE);
+
+    if (game.food) {
+        const pulseScale = 1 + Math.sin(Date.now() / 200) * 0.15; // Oscillates ~0.85 to 1.15
+        const centerX = (game.food.x + 0.5) * CELL_SIZE;
+        const centerY = (game.food.y + 0.5) * CELL_SIZE;
+
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.scale(pulseScale, pulseScale);
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('🐟', 0, 0); // Draw at origin of translated context
+        ctx.restore();
+    }
     if (game.litterBox) drawLitterBoxGraphic(ctx, game.litterBox.x * CELL_SIZE, game.litterBox.y * CELL_SIZE, CELL_SIZE, CELL_SIZE, false);
     if (game.catBed) ctx.fillText('🛏️', (game.catBed.x + 0.5) * CELL_SIZE, (game.catBed.y + 0.5) * CELL_SIZE);
     if (game.catnip) ctx.fillText('🌿', (game.catnip.x + 0.5) * CELL_SIZE, (game.catnip.y + 0.5) * CELL_SIZE);
@@ -120,15 +132,15 @@ function draw(interpolationFactor, renderDeltaTime) {
     }
 
     if (game.mouse) {
-        const mouseMovementPeriod = 500; 
+        const mouseMovementPeriod = 500;
         const timeSinceMouseMove = performance.now() - game.mouse.lastMoveTimestamp;
-        const mouseInterpolationFactor = Math.min(1, timeSinceMouseMove / mouseMovementPeriod); 
-        
+        const mouseInterpolationFactor = Math.min(1, timeSinceMouseMove / mouseMovementPeriod);
+
         const currentX = game.mouse.px + (game.mouse.x - game.mouse.px) * mouseInterpolationFactor;
         const currentY = game.mouse.py + (game.mouse.y - game.mouse.py) * mouseInterpolationFactor;
         ctx.fillText('🐀', (currentX + 0.5) * CELL_SIZE, (currentY + 0.5) * CELL_SIZE);
     }
-    
+
     game.snake.forEach((seg, index) => {
         const currentX = seg.px + (seg.x - seg.px) * interpolationFactor;
         const currentY = seg.py + (seg.y - seg.py) * interpolationFactor;
@@ -138,7 +150,7 @@ function draw(interpolationFactor, renderDeltaTime) {
         if (index === 0) {
             drawCatHead(ctx, centerX, centerY, CELL_SIZE);
         } else if (index === game.snake.length - 1) {
-            const tailColor = game.isTurbo ? '#66ffff' : '#ffb366'; 
+            const tailColor = game.isTurbo ? '#66ffff' : '#ffb366';
             ctx.fillStyle = tailColor;
             ctx.beginPath();
             ctx.arc(centerX, centerY, (CELL_SIZE - 8) / 2, 0, Math.PI * 2);
@@ -155,7 +167,7 @@ function draw(interpolationFactor, renderDeltaTime) {
     if (game.animating && game.zHead) {
         drawSleepAnimation(ctx, renderDeltaTime);
     }
-    
+
     if (game.arfHead) {
         drawArfAnimation(ctx, renderDeltaTime);
     }
@@ -167,33 +179,33 @@ function draw(interpolationFactor, renderDeltaTime) {
 
 function drawCatHead(ctx, centerX, centerY, cellSize) {
     const faceRadius = (cellSize / 2) - 4;
-    const catColor = game.isTurbo ? '#66ffff' : '#ff8c42'; 
+    const catColor = game.isTurbo ? '#66ffff' : '#ff8c42';
     ctx.fillStyle = catColor;
     ctx.beginPath();
     ctx.arc(centerX, centerY, faceRadius, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.fillStyle = catColor;
-    if (game.direction.y === -1) { 
+    if (game.direction.y === -1) {
         drawEar(ctx, centerX, centerY, faceRadius, -1, -1);
         drawEar(ctx, centerX, centerY, faceRadius, 1, -1);
-    } else if (game.direction.y === 1) { 
+    } else if (game.direction.y === 1) {
         drawEar(ctx, centerX, centerY, faceRadius, -1, 1);
         drawEar(ctx, centerX, centerY, faceRadius, 1, 1);
-    } else if (game.direction.x === -1) { 
+    } else if (game.direction.x === -1) {
         drawEar(ctx, centerX, centerY, faceRadius, -1, 1, true);
         drawEar(ctx, centerX, centerY, faceRadius, -1, -1, true);
-    } else { 
+    } else {
         drawEar(ctx, centerX, centerY, faceRadius, 1, 1, true);
         drawEar(ctx, centerX, centerY, faceRadius, 1, -1, true);
     }
 
     let eyeOffsetX = 0;
     let eyeOffsetY = -faceRadius * 0.2;
-    if (game.direction.x === 1) { eyeOffsetX = faceRadius * 0.2; eyeOffsetY = 0; } 
-    else if (game.direction.x === -1) { eyeOffsetX = -faceRadius * 0.2; eyeOffsetY = 0; } 
+    if (game.direction.x === 1) { eyeOffsetX = faceRadius * 0.2; eyeOffsetY = 0; }
+    else if (game.direction.x === -1) { eyeOffsetX = -faceRadius * 0.2; eyeOffsetY = 0; }
     else if (game.direction.y === 1) { eyeOffsetY = faceRadius * 0.2; }
-    
+
     ctx.fillStyle = '#4ade80';
     ctx.beginPath();
     if (game.direction.y !== 0) {
@@ -204,7 +216,7 @@ function drawCatHead(ctx, centerX, centerY, cellSize) {
         ctx.arc(centerX + eyeOffsetX, centerY + faceRadius * 0.25, 6, 0, Math.PI * 2);
     }
     ctx.fill();
-    
+
     ctx.fillStyle = 'black';
     if (game.direction.y !== 0) {
         ctx.fillRect(centerX - faceRadius * 0.35 - 1, centerY + eyeOffsetY - 5, 2, 10);
@@ -213,7 +225,7 @@ function drawCatHead(ctx, centerX, centerY, cellSize) {
         ctx.fillRect(centerX + eyeOffsetX - 1, centerY - faceRadius * 0.25 - 5, 2, 10);
         ctx.fillRect(centerX + eyeOffsetX - 1, centerY + faceRadius * 0.25 - 5, 2, 10);
     }
-    
+
     ctx.fillStyle = '#ffb3d9';
     ctx.beginPath();
     if (game.direction.y === -1) {
@@ -235,28 +247,28 @@ function drawCatHead(ctx, centerX, centerY, cellSize) {
     }
     ctx.closePath();
     ctx.fill();
-    
+
     ctx.strokeStyle = '#333';
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     if (game.direction.y !== 0) {
-         ctx.moveTo(centerX - faceRadius * 0.6, centerY - 5); ctx.lineTo(centerX - faceRadius * 1.5, centerY - 8);
-         ctx.moveTo(centerX - faceRadius * 0.6, centerY); ctx.lineTo(centerX - faceRadius * 1.5, centerY);
-         ctx.moveTo(centerX + faceRadius * 0.6, centerY - 5); ctx.lineTo(centerX + faceRadius * 1.5, centerY - 8);
-         ctx.moveTo(centerX + faceRadius * 0.6, centerY); ctx.lineTo(centerX + faceRadius * 1.5, centerY);
+        ctx.moveTo(centerX - faceRadius * 0.6, centerY - 5); ctx.lineTo(centerX - faceRadius * 1.5, centerY - 8);
+        ctx.moveTo(centerX - faceRadius * 0.6, centerY); ctx.lineTo(centerX - faceRadius * 1.5, centerY);
+        ctx.moveTo(centerX + faceRadius * 0.6, centerY - 5); ctx.lineTo(centerX + faceRadius * 1.5, centerY - 8);
+        ctx.moveTo(centerX + faceRadius * 0.6, centerY); ctx.lineTo(centerX + faceRadius * 1.5, centerY);
     } else {
-         ctx.moveTo(centerX - 5, centerY - faceRadius * 0.6); ctx.lineTo(centerX - 8, centerY - faceRadius * 1.5);
-         ctx.moveTo(centerX, centerY - faceRadius * 0.6); ctx.lineTo(centerX, centerY - faceRadius * 1.5);
-         ctx.moveTo(centerX + 5, centerY - faceRadius * 0.6); ctx.lineTo(centerX + 8, centerY - faceRadius * 1.5);
-         ctx.moveTo(centerX, centerY + faceRadius * 0.6); ctx.lineTo(centerX, centerY + faceRadius * 1.5);
+        ctx.moveTo(centerX - 5, centerY - faceRadius * 0.6); ctx.lineTo(centerX - 8, centerY - faceRadius * 1.5);
+        ctx.moveTo(centerX, centerY - faceRadius * 0.6); ctx.lineTo(centerX, centerY - faceRadius * 1.5);
+        ctx.moveTo(centerX + 5, centerY - faceRadius * 0.6); ctx.lineTo(centerX + 8, centerY - faceRadius * 1.5);
+        ctx.moveTo(centerX, centerY + faceRadius * 0.6); ctx.lineTo(centerX, centerY + faceRadius * 1.5);
     }
     ctx.stroke();
 }
 
 function drawEar(ctx, cx, cy, r, sideX, sideY, isHorizontal) {
-    ctx.fillStyle = game.isTurbo ? '#66ffff' : '#ff8c42'; 
+    ctx.fillStyle = game.isTurbo ? '#66ffff' : '#ff8c42';
     ctx.beginPath();
-    if(!isHorizontal) {
+    if (!isHorizontal) {
         ctx.moveTo(cx + (sideX * r * 0.6), cy + (sideY * r * 0.4));
         ctx.lineTo(cx + (sideX * r * 0.8), cy + (sideY * r * 1.3));
         ctx.lineTo(cx + (sideX * r * 0.3), cy + (sideY * r * 0.7));
@@ -267,10 +279,10 @@ function drawEar(ctx, cx, cy, r, sideX, sideY, isHorizontal) {
     }
     ctx.closePath();
     ctx.fill();
-    
+
     ctx.fillStyle = '#ffb3d9';
     ctx.beginPath();
-    if(!isHorizontal) {
+    if (!isHorizontal) {
         ctx.moveTo(cx + (sideX * r * 0.55), cy + (sideY * r * 0.5));
         ctx.lineTo(cx + (sideX * r * 0.7), cy + (sideY * r * 1.1));
         ctx.lineTo(cx + (sideX * r * 0.4), cy + (sideY * r * 0.7));
@@ -285,91 +297,91 @@ function drawEar(ctx, cx, cy, r, sideX, sideY, isHorizontal) {
 
 function drawSleepAnimation(ctx, renderDeltaTime) {
     if (!game.paused) {
-        const Z_SPEED = 40; 
-        const MAX_Z_OFFSET = 80; 
+        const Z_SPEED = 40;
+        const MAX_Z_OFFSET = 80;
         const dist = Z_SPEED * renderDeltaTime * game.zDirection;
-        
+
         game.zStream.forEach(z => {
             z.offsetY += dist;
             const distance = Math.abs(z.offsetY);
             const progress = Math.min(1, distance / MAX_Z_OFFSET);
-            z.offsetX = z.startOffsetX * (1 - progress); 
-            z.alpha = 1 - progress; 
+            z.offsetX = z.startOffsetX * (1 - progress);
+            z.alpha = 1 - progress;
         });
 
         game.zStream = game.zStream.filter(z => Math.abs(z.offsetY) < MAX_Z_OFFSET);
     }
 
-    const head = game.zHead; 
+    const head = game.zHead;
     const cx = (head.x + 0.5) * CELL_SIZE;
-    const cy = (head.y + 0.5) * CELL_SIZE; 
-    
+    const cy = (head.y + 0.5) * CELL_SIZE;
+
     ctx.font = 'bold 24px Arial';
     game.zStream.forEach(z => {
-        ctx.globalAlpha = z.alpha; 
+        ctx.globalAlpha = z.alpha;
         ctx.fillStyle = '#667eea';
-        ctx.fillText('Z', cx + z.offsetX, cy + z.offsetY); 
+        ctx.fillText('Z', cx + z.offsetX, cy + z.offsetY);
     });
-    ctx.globalAlpha = 1; 
+    ctx.globalAlpha = 1;
 }
 
 function drawArfAnimation(ctx, renderDeltaTime) {
     if (!game.paused) {
-        const ARF_SPEED = 40; 
-        const MAX_ARF_OFFSET = 80; 
+        const ARF_SPEED = 40;
+        const MAX_ARF_OFFSET = 80;
         const dist = ARF_SPEED * renderDeltaTime * game.arfDirection;
-        
+
         game.arfStream.forEach(arf => {
             arf.offsetY += dist;
             const distance = Math.abs(arf.offsetY);
             const progress = Math.min(1, distance / MAX_ARF_OFFSET);
-            arf.offsetX = arf.startOffsetX * (1 - progress); 
-            arf.alpha = 1 - progress; 
+            arf.offsetX = arf.startOffsetX * (1 - progress);
+            arf.alpha = 1 - progress;
         });
 
         game.arfStream = game.arfStream.filter(arf => Math.abs(arf.offsetY) < MAX_ARF_OFFSET);
     }
 
-    const head = game.arfHead; 
+    const head = game.arfHead;
     const cx = (head.x + 0.5) * CELL_SIZE;
-    const cy = (head.y + 0.5) * CELL_SIZE; 
-    
+    const cy = (head.y + 0.5) * CELL_SIZE;
+
     ctx.font = 'bold 18px Arial';
     game.arfStream.forEach(arf => {
-        ctx.globalAlpha = arf.alpha; 
+        ctx.globalAlpha = arf.alpha;
         ctx.fillStyle = '#333';
-        ctx.fillText(arf.text, cx + arf.offsetX, cy + arf.offsetY); 
+        ctx.fillText(arf.text, cx + arf.offsetX, cy + arf.offsetY);
     });
-    ctx.globalAlpha = 1; 
+    ctx.globalAlpha = 1;
 }
 
 function drawFeedback(ctx, timestamp) {
     const timeSinceFeedbackStart = timestamp - game.feedbackStartTime;
     const isCollision = game.feedbackMessage.includes("hit the wall") || game.feedbackMessage.includes("ran into yourself") || game.feedbackMessage.includes("Fatal");
     const isTurboOrRestore = game.feedbackMessage.includes("ZOOMIES") || game.feedbackMessage.includes("Speed Restored");
-    
+
     if (!isTurboOrRestore) {
-        if (isCollision && timeSinceFeedbackStart < 100) { 
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)'; 
+        if (isCollision && timeSinceFeedbackStart < 100) {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         } else {
-            ctx.fillStyle = 'rgba(0,0,0,0.6)'; 
+            ctx.fillStyle = 'rgba(0,0,0,0.6)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
     }
 
     ctx.fillStyle = 'white';
-    ctx.font = 'bold 48px Arial'; 
+    ctx.font = 'bold 48px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    
+
     ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
     ctx.shadowBlur = 8;
     ctx.shadowOffsetX = 4;
     ctx.shadowOffsetY = 4;
 
     ctx.fillText(game.feedbackMessage, canvas.width / 2, canvas.height / 2);
-    
+
     ctx.shadowColor = 'transparent';
     ctx.shadowBlur = 0;
     ctx.shadowOffsetX = 0;
@@ -381,8 +393,8 @@ function drawLegendItems() {
     if (litterItem) {
         const lCanv = document.createElement('canvas');
         lCanv.width = 40; lCanv.height = 40;
-        const lCtx = lCanv.getContext('2d'); 
-        lCtx.fillStyle = '#f8f9ff'; lCtx.fillRect(0,0,40,40);
+        const lCtx = lCanv.getContext('2d');
+        lCtx.fillStyle = '#f8f9ff'; lCtx.fillRect(0, 0, 40, 40);
         litterItem.innerHTML = ''; litterItem.appendChild(lCanv);
         drawLitterBoxGraphic(lCtx, 0, 0, 40, 40, true);
     }
