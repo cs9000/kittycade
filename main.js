@@ -1,8 +1,8 @@
-let logicLoopId = null; 
+let logicLoopId = null;
 let particleContainer = null;
 let animationFrameId = null;
 let mouseLogicId = null;
-let featherTimerId = null; 
+let featherTimerId = null;
 
 let readyTimeoutId = null;
 let readyCountdown = 0;
@@ -22,7 +22,7 @@ function stopTimedIntervals() {
     if (mouseLogicId) { clearInterval(mouseLogicId); mouseLogicId = null; }
     if (readyTimeoutId) { clearTimeout(readyTimeoutId); readyTimeoutId = null; }
     if (feedbackTimeoutId) { clearTimeout(feedbackTimeoutId); feedbackTimeoutId = null; }
-    if (featherTimerId) { clearTimeout(featherTimerId); featherTimerId = null; } 
+    if (featherTimerId) { clearTimeout(featherTimerId); featherTimerId = null; }
 }
 
 function stopGameLoops() {
@@ -92,7 +92,7 @@ function updatePauseState() {
         if (wasFeedbackRunning) feedbackCountdown -= (performance.now() - feedbackCountdownStart);
         if (wasTurboRunning) turboCountdown -= (performance.now() - turboCountdownStart);
     }
-    
+
     // 3. Decide what to restart
     const shouldBePaused = game.userPaused || game.systemPaused;
     if (!shouldBePaused) {
@@ -107,7 +107,7 @@ function updatePauseState() {
         } else {
             game.lag = 0; // Fresh start, or no lag to restore
         }
-        
+
         // Set current time as last frame time to start fresh delta calculation for the gameLoop
         game.lastFrameTime = performance.now();
 
@@ -150,7 +150,7 @@ function updatePauseState() {
 
 // --- Game Flow Control ---
 
-window.initGame = function(baseSpeed = 200) {
+window.initGame = function (baseSpeed = 200) {
     resetGameState();
     game.score = 0;
     game.lives = 3;
@@ -163,7 +163,7 @@ window.initGame = function(baseSpeed = 200) {
     game.started = true;
     game.lastFrameTime = performance.now(); // Initialize for logic updates
     game.lastRenderTime = performance.now(); // Initialize for rendering updates
-    
+
     // Reset background animation speed
     game.backgroundAnimationDuration = 15;
     document.body.style.animationDuration = '15s';
@@ -210,7 +210,7 @@ function showReady() {
     playSound('ready');
     game.systemPaused = true;
     updatePauseState();
-    
+
     readyCountdown = 2000;
     readyCountdownStart = performance.now();
 
@@ -223,7 +223,7 @@ function showReady() {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText('Ready!', canvas.width / 2, canvas.height / 2);
-    
+
     startCountdown(readyCountdown);
 }
 
@@ -232,7 +232,7 @@ function update() {
     updateUI();
 }
 
-window.loseLife = function(msg) {
+window.loseLife = function (msg) {
     game.lives--;
     playSound('lose_life');
     if (game.isTurbo) {
@@ -241,10 +241,10 @@ window.loseLife = function(msg) {
     game.systemPaused = true;
     updatePauseState();
 
-    game.feedbackMessage = msg; 
-    game.feedbackStartTime = performance.now(); 
+    game.feedbackMessage = msg;
+    game.feedbackStartTime = performance.now();
     draw(game.feedbackStartTime);
-    
+
     if (game.lives <= 0) {
         feedbackCallback = () => {
             endGame();
@@ -252,21 +252,21 @@ window.loseLife = function(msg) {
         };
     } else {
         feedbackCallback = () => {
-            game.feedbackMessage = null; 
+            game.feedbackMessage = null;
             resetGameState();
-            game.started = true; 
+            game.started = true;
             spawnFood();
             showReady();
         };
     }
-    
-                                            feedbackCountdown = 1500;
-    
-                                            feedbackCountdownStart = performance.now();
-    
-                                            startFeedbackCountdown(feedbackCountdown);
-    
-                                            updateUI(); // Update UI after life is lost
+
+    feedbackCountdown = 1500;
+
+    feedbackCountdownStart = performance.now();
+
+    startFeedbackCountdown(feedbackCountdown);
+
+    updateUI(); // Update UI after life is lost
 }
 
 function endGame() {
@@ -286,13 +286,13 @@ function endGame() {
         game.highScore = game.score;
         localStorage.setItem('catSnakeHighScore', game.highScore);
     }
-    
+
     document.getElementById('finalScore').textContent = `Your Score: ${game.score}`;
     document.getElementById('highScoreDisplay').textContent = `High: ${game.highScore}`;
     document.getElementById('gameOverScreen').classList.remove('hidden');
 }
 
-window.checkLevelUp = function() {
+window.checkLevelUp = function () {
     const threshold = game.level * 5000;
     if (game.score >= threshold) {
         game.level++;
@@ -307,53 +307,64 @@ window.checkLevelUp = function() {
         if (game.isTurbo) {
             window.restoreNormalSpeed(true); // Properly end turbo mode
         }
-        
+
         game.systemPaused = true;
         updatePauseState();
-        game.feedbackMessage = `Great - Level ${game.level}! 🚀`; 
-        game.feedbackStartTime = performance.now(); 
+        game.feedbackMessage = `Great - Level ${game.level}! 🚀`;
+        game.feedbackStartTime = performance.now();
         draw(game.feedbackStartTime);
-        
+
         feedbackCallback = () => {
-            game.feedbackMessage = null; 
+            game.feedbackMessage = null;
             resetGameState();
             game.started = true;
             spawnFood();
             showReady();
         };
-        
+
         feedbackCountdown = 2000;
         feedbackCountdownStart = performance.now();
         startFeedbackCountdown(feedbackCountdown);
     }
 }
 
-window.activateTurbo = function() {
+window.activateTurbo = function () {
     if (featherTimerId) { clearTimeout(featherTimerId); } // Clear any existing timer
-    
+
     game.isTurbo = true;
-    game.speed = game.baseSpeed * 0.75; 
-    startMouseLogic(); 
-    
+    game.speed = game.baseSpeed * 0.75;
+    startMouseLogic();
+
     game.feedbackMessage = `ZOOMIES!`;
-    game.feedbackStartTime = performance.now(); 
-    
+    game.feedbackStartTime = performance.now();
+
+    // Clear message after 1.5 seconds
+    if (feedbackTimeoutId) clearTimeout(feedbackTimeoutId);
+    feedbackCallback = () => {
+        if (game.feedbackMessage === `ZOOMIES!`) {
+            game.feedbackMessage = null;
+        }
+    };
+    feedbackCountdown = 1500;
+    feedbackCountdownStart = performance.now();
+    startFeedbackCountdown(feedbackCountdown);
+
     turboCountdown = 5000;
     turboCountdownStart = performance.now();
     startTurboCountdown(turboCountdown);
 }
 
-window.restoreNormalSpeed = function(silent = false) {
+window.restoreNormalSpeed = function (silent = false) {
     if (featherTimerId) { clearTimeout(featherTimerId); featherTimerId = null; }
     turboCountdown = 0;
 
     game.isTurbo = false;
-    game.speed = game.baseSpeed; 
-    
+    game.speed = game.baseSpeed;
+
     if (!silent) {
         game.feedbackMessage = `Speed Restored.`;
-        game.feedbackStartTime = performance.now(); 
-        
+        game.feedbackStartTime = performance.now();
+
         setTimeout(() => { game.feedbackMessage = null; game.feedbackStartTime = 0; }, 1000);
     } else {
         // When silent, clear the ZOOMIES! message if it's the one present.
@@ -363,10 +374,10 @@ window.restoreNormalSpeed = function(silent = false) {
         }
     }
 
-    startMouseLogic(); 
+    startMouseLogic();
 }
 
-window.togglePause = function() {
+window.togglePause = function () {
     if (game.gameOver) return;
     game.userPaused = !game.userPaused;
     updatePauseState();
@@ -549,7 +560,7 @@ function updateParticleSpeed(speed) {
 document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
         // --- TAB HIDDEN ---
-        
+
         // 1. Stop Music immediately
         if (game.introMusicTimeoutId) {
             clearTimeout(game.introMusicTimeoutId);
@@ -578,7 +589,7 @@ document.addEventListener("visibilitychange", () => {
         const startScreen = document.getElementById('startScreen');
         const gameOverScreen = document.getElementById('gameOverScreen');
         if (!startScreen.classList.contains('hidden') || !gameOverScreen.classList.contains('hidden')) {
-             window.playIntroSound();
+            window.playIntroSound();
         }
     }
 });
