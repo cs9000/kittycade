@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/tsparticles-slim@latest/tsparticles.slim.bundle.min.js"></script>
 </head>
+
 <body>
     <div id="tsparticles"></div>
     <div id="main-content-wrapper">
@@ -39,52 +41,52 @@
             </div>
         </div>
     </div>
-        
-        <div id="clickToStartOverlay">
-            <h1>Click to Start!</h1>
+
+    <div id="clickToStartOverlay">
+        <h1>Click to Start!</h1>
+    </div>
+
+    <div id="startScreen" class="hidden">
+        <h1>🐱 Kittycade</h1>
+        <div class="instructions">
+            <p><strong>Get food and catch the mouse to grow.<br>Use the litter box to shrink.</strong></p>
+            <p id="controlText"></p>
         </div>
-        
-        <div id="startScreen" class="hidden">
-            <h1>🐱 Kittycade</h1>
-            <div class="instructions">
-                <p><strong>Get food and catch the mouse to grow.<br>Use the litter box to shrink.</strong></p>
-                <p id="controlText"></p>
-            </div>
-            <div class="legend">
-                <div class="legend-item">🐟</div>
-                <div class="legend-text">Food (100 pts) - Grow</div>
-                <div class="legend-item" id="litterBoxLegendItem"></div>
-                <div class="legend-text">Litter Box (100 pts) - Shrink (3 Segments)</div>
-                <div class="legend-item">🐀</div>
-                <div class="legend-text">Mischievous Mouse (500 pts) - Grow</div>
-                <div class="legend-item">🧶</div>
-                <div class="legend-text">Yarn ball (300 pts) - Score Bonus</div>
-                <div class="legend-item">🛏️</div>
-                <div class="legend-text">Cat Bed (200 pts) - Score Bonus & Nap</div>
-                <div class="legend-item">🌿</div>
-                <div class="legend-text">Catnip (1000 pts) - Score & Turbo Speed!</div>
-                <div class="legend-item">🐕</div>
-                <div class="legend-text">Dog (500 pts) - Tip: use catnip!</div>
-            </div>
-            <div class="start-buttons">
-                <button id="startNormalBtn">Normal</button>
-                <button id="startRelaxedBtn">Relaxed</button>
-            </div>
+        <div class="legend">
+            <div class="legend-item">🐟</div>
+            <div class="legend-text">Food (100 pts) - Grow</div>
+            <div class="legend-item" id="litterBoxLegendItem"></div>
+            <div class="legend-text">Litter Box (100 pts) - Shrink (3 Segments)</div>
+            <div class="legend-item">🐀</div>
+            <div class="legend-text">Mischievous Mouse (500 pts) - Grow</div>
+            <div class="legend-item">🧶</div>
+            <div class="legend-text">Yarn ball (300 pts) - Score Bonus</div>
+            <div class="legend-item">🛏️</div>
+            <div class="legend-text">Cat Bed (200 pts) - Score Bonus & Nap</div>
+            <div class="legend-item">🌿</div>
+            <div class="legend-text">Catnip (1000 pts) - Score & Turbo Speed!</div>
+            <div class="legend-item">🐕</div>
+            <div class="legend-text">Dog (500 pts) - Tip: use catnip!</div>
         </div>
-        
-        <div id="gameOverScreen" class="hidden">
-            <h1>Game Over!</h1>
-            <p id="finalScore"></p>
-            <p id="highScoreDisplay"></p>
-            <button id="restartBtn">Play Again</button>
-        </div>
-        
-        <div id="pauseOverlay" class="hidden">PAUSED</div>
-        <div id="loadingOverlay">
-            <h1>Loading...</h1>
+        <div class="start-buttons">
+            <button id="startNormalBtn">Normal</button>
+            <button id="startRelaxedBtn">Relaxed</button>
         </div>
     </div>
-    
+
+    <div id="gameOverScreen" class="hidden">
+        <h1>Game Over!</h1>
+        <p id="finalScore"></p>
+        <p id="highScoreDisplay"></p>
+        <button id="restartBtn">Play Again</button>
+    </div>
+
+    <div id="pauseOverlay" class="hidden">PAUSED</div>
+    <div id="loadingOverlay">
+        <h1>Loading...</h1>
+    </div>
+    </div>
+
     <script src="constants.js"></script>
     <script src="audio.js"></script>
     <script src="state.js"></script>
@@ -93,4 +95,5 @@
     <script src="input.js"></script>
     <script src="main.js"></script>
 </body>
+
 </html>
