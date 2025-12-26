@@ -5,7 +5,7 @@ function getEmptyCells() {
     const empty = [];
     for (let x = 0; x < GRID_SIZE; x++) {
         for (let y = 0; y < GRID_SIZE; y++) {
-            if (!isOccupied(x, y)) empty.push({x, y});
+            if (!isOccupied(x, y)) empty.push({ x, y });
         }
     }
     return empty;
@@ -13,12 +13,12 @@ function getEmptyCells() {
 
 function isOccupied(x, y) {
     if (game.snake.some(seg => seg.x === x && seg.y === y)) return true;
-    if (game.nextHeadPos && game.nextHeadPos.x === x && game.nextHeadPos.y === y) return true; 
+    if (game.nextHeadPos && game.nextHeadPos.x === x && game.nextHeadPos.y === y) return true;
     if (game.food && game.food.x === x && game.food.y === y) return true;
     if (game.litterBox && game.litterBox.x === x && game.litterBox.y === y) return true;
     if (game.treat && game.treat.x === x && game.treat.y === y) return true;
     if (game.catBed && game.catBed.x === x && game.catBed.y === y) return true;
-    if (game.catnip && game.catnip.x === x && game.catnip.y === y) return true; 
+    if (game.catnip && game.catnip.x === x && game.catnip.y === y) return true;
     if (game.mouse && game.mouse.x === x && game.mouse.y === y) return true;
     if (game.dog && game.dog.x === x && game.dog.y === y) return true;
     return false;
@@ -36,7 +36,7 @@ function isOccupiedForDogMove(x, y) {
     if (game.litterBox && game.litterBox.x === x && game.litterBox.y === y) return true;
     if (game.treat && game.treat.x === x && game.treat.y === y) return true;
     if (game.catBed && game.catBed.x === x && game.catBed.y === y) return true;
-    if (game.catnip && game.catnip.x === x && game.catnip.y === y) return true; 
+    if (game.catnip && game.catnip.x === x && game.catnip.y === y) return true;
     if (game.mouse && game.mouse.x === x && game.mouse.y === y) return true;
     return false;
 }
@@ -65,7 +65,7 @@ function spawnCatBed() {
 }
 
 function spawnMouse() {
-    if (game.mouse || Math.random() > 0.15) return; 
+    if (game.mouse || Math.random() > 0.15) return;
     const empty = getEmptyCells();
     if (empty.length > 0) {
         const newPos = empty[Math.floor(Math.random() * empty.length)];
@@ -74,14 +74,14 @@ function spawnMouse() {
 }
 
 function spawnCatnip() {
-    if (game.catnip || Math.random() > 0.1) return; 
+    if (game.catnip || Math.random() > 0.1) return;
     const empty = getEmptyCells();
     if (empty.length > 0) game.catnip = empty[Math.floor(Math.random() * empty.length)];
 }
 
 function spawnDog() {
     if (game.dog || Math.random() > 0.1) return;
-    
+
     let empty = getEmptyCells();
     if (empty.length === 0) return;
 
@@ -94,7 +94,7 @@ function spawnDog() {
         { x: head.x + (dir.x * 3), y: head.y + (dir.y * 3) }
     ];
 
-    let safeCells = empty.filter(cell => 
+    let safeCells = empty.filter(cell =>
         !dangerZone.some(danger => danger.x === cell.x && danger.y === cell.y)
     );
 
@@ -112,13 +112,13 @@ function moveMouse() {
     if (!game.mouse) return;
     game.mouse.px = game.mouse.x;
     game.mouse.py = game.mouse.y;
-    const dirs = [{x: 1, y: 0}, {x: -1, y: 0}, {x: 0, y: 1}, {x: 0, y: -1}];
+    const dirs = [{ x: 1, y: 0 }, { x: -1, y: 0 }, { x: 0, y: 1 }, { x: 0, y: -1 }];
     const moves = [];
     for (const d of dirs) {
         const nx = game.mouse.x + d.x;
         const ny = game.mouse.y + d.y;
         if (nx >= 0 && nx < GRID_SIZE && ny >= 0 && ny < GRID_SIZE && !isOccupied(nx, ny)) {
-            moves.push({x: nx, y: ny});
+            moves.push({ x: nx, y: ny });
         }
     }
     if (moves.length > 0) {
@@ -144,8 +144,8 @@ function moveDog() {
     const dx = catHead.x - dogPos.x;
     const dy = catHead.y - dogPos.y;
 
-    const dirs = [{x: 1, y: 0}, {x: -1, y: 0}, {x: 0, y: 1}, {x: 0, y: -1}];
-    
+    const dirs = [{ x: 1, y: 0 }, { x: -1, y: 0 }, { x: 0, y: 1 }, { x: 0, y: -1 }];
+
     let bestMoves = [];
     let validMoves = [];
 
@@ -154,7 +154,7 @@ function moveDog() {
         const ny = dogPos.y + d.y;
 
         if (nx >= 0 && nx < GRID_SIZE && ny >= 0 && ny < GRID_SIZE && !isOccupiedForDogMove(nx, ny)) {
-            const move = {x: nx, y: ny};
+            const move = { x: nx, y: ny };
             validMoves.push(move);
 
             const newDx = catHead.x - nx;
@@ -171,7 +171,7 @@ function moveDog() {
     } else if (validMoves.length > 0) {
         finalMove = validMoves[Math.floor(Math.random() * validMoves.length)];
     }
-    
+
     if (finalMove) {
         game.dog.x = finalMove.x;
         game.dog.y = finalMove.y;
@@ -180,14 +180,14 @@ function moveDog() {
 
 function animateSleep(head) {
     game.animating = true;
-    game.zHead = {x: head.x, y: head.y}; 
-    game.zDirection = head.y < 2 ? 1 : -1; 
+    game.zHead = { x: head.x, y: head.y };
+    game.zDirection = head.y < 2 ? 1 : -1;
     const MAX_Z = 6;
     let zCount = 0;
-    
+
     if (zIntervalId) clearInterval(zIntervalId);
     zIntervalId = setInterval(() => {
-        game.zStream.push({ 
+        game.zStream.push({
             offsetY: 0, offsetX: 0, startOffsetX: (Math.random() * 20 - 10) * game.zDirection, alpha: 1
         });
         zCount++;
@@ -195,24 +195,24 @@ function animateSleep(head) {
             clearInterval(zIntervalId);
             zIntervalId = null;
             setTimeout(() => {
-                game.animating = false; 
+                game.animating = false;
                 game.zHead = null;
-                game.zStream = []; 
-            }, 1000); 
+                game.zStream = [];
+            }, 1000);
         }
-    }, 300); 
+    }, 300);
 }
 
 function animateArf(head) {
-    game.arfHead = {x: head.x, y: head.y}; 
-    game.arfDirection = head.y < 2 ? 1 : -1; 
+    game.arfHead = { x: head.x, y: head.y };
+    game.arfDirection = head.y < 2 ? 1 : -1;
     const MAX_ARF = 3;
     let arfCount = 0;
-    
+
     if (arfIntervalId) clearInterval(arfIntervalId);
     playSound('bark');
     arfIntervalId = setInterval(() => {
-        game.arfStream.push({ 
+        game.arfStream.push({
             text: 'Arf!',
             offsetY: 0, offsetX: 0, startOffsetX: (Math.random() * 20 - 10) * game.arfDirection, alpha: 1
         });
@@ -222,14 +222,14 @@ function animateArf(head) {
             arfIntervalId = null;
             setTimeout(() => {
                 game.arfHead = null;
-                game.arfStream = []; 
-            }, 1000); 
+                game.arfStream = [];
+            }, 1000);
         }
-    }, 300); 
+    }, 300);
 }
 
 function updateGameLogic() {
-    if (game.gameOver || game.paused || game.animating) return; 
+    if (game.gameOver || game.paused || game.animating) return;
     if (game.snake.length === 0) { window.loseLife("Fatal error: Cat vanished!"); return; }
 
     moveDog();
@@ -243,37 +243,38 @@ function updateGameLogic() {
 
     if (game.inputBuffer.length > 0) {
         const bufferedDir = game.inputBuffer.shift();
-        if ((bufferedDir.x !== 0 && game.direction.x === 0) || 
+        if ((bufferedDir.x !== 0 && game.direction.x === 0) ||
             (bufferedDir.y !== 0 && game.direction.y === 0)) {
             game.nextDirection = bufferedDir;
         }
     }
-    
-    game.direction = {...game.nextDirection};
-    const oldHead = game.snake[0]; 
+
+    game.direction = { ...game.nextDirection };
+    const oldHead = game.snake[0];
     const tx = oldHead.x + game.direction.x;
     const ty = oldHead.y + game.direction.y;
-    game.nextHeadPos = {x: tx, y: ty}; 
+    game.nextHeadPos = { x: tx, y: ty };
 
     // Collisions
     if (tx < 0 || tx >= GRID_SIZE || ty < 0 || ty >= GRID_SIZE) {
-        window.loseLife("Oops! You hit the wall!"); 
-        game.nextHeadPos = null; 
+        window.loseLife("Oops! You hit the wall!");
+        game.nextHeadPos = null;
         return;
     }
     if (game.snake.slice(1).some(seg => seg.x === tx && seg.y === ty)) {
-        window.loseLife("You ran into yourself!"); 
-        game.nextHeadPos = null; 
+        window.loseLife("You ran into yourself!");
+        game.nextHeadPos = null;
         return;
     }
     if (game.dog && tx === game.dog.x && ty === game.dog.y) {
         if (game.isTurbo) {
             game.score += 500;
+            spawnFloatingText(tx, ty, "+500", "#f43f5e");
             game.dog = null;
             playSound('dog_get');
         } else {
             window.loseLife("Don't mess with the dog!");
-            game.nextHeadPos = null; 
+            game.nextHeadPos = null;
             return;
         }
     }
@@ -285,39 +286,45 @@ function updateGameLogic() {
     if (game.food && tx === game.food.x && ty === game.food.y) {
         game.score += 100; game.foodCount++; game.food = null;
         playSound('food');
+        spawnFloatingText(tx, ty, "+100", "#4ade80");
         spawnFood();
-        if (Math.random() < 0.33) spawnLitterBox(); 
+        if (Math.random() < 0.33) spawnLitterBox();
         spawnTreat(); spawnCatBed(); spawnMouse(); spawnCatnip(); spawnDog();
         isGrowing = true;
     }
     else if (game.treat && tx === game.treat.x && ty === game.treat.y) {
         game.score += 300; game.treat = null; playSound('treat');
+        spawnFloatingText(tx, ty, "+300", "#e879f9");
     }
     else if (game.catBed && tx === game.catBed.x && ty === game.catBed.y) {
         game.score += 200; game.catBed = null;
         playSound('bed');
-        game.shouldAnimateSleep = true; 
-        if (game.isTurbo) window.restoreNormalSpeed(true); 
+        spawnFloatingText(tx, ty, "+200", "#60a5fa");
+        game.shouldAnimateSleep = true;
+        if (game.isTurbo) window.restoreNormalSpeed(true);
     }
     else if (game.litterBox && tx === game.litterBox.x && ty === game.litterBox.y) {
         game.score += 100; isShrinking = true; game.litterBox = null;
         playSound('litter');
+        spawnFloatingText(tx, ty, "+100", "#fba640");
     }
     else if (game.mouse && tx === game.mouse.x && ty === game.mouse.y) {
-        game.score += 500; game.mouse = null; isGrowing = true; 
+        game.score += 500; game.mouse = null; isGrowing = true;
         playSound('mouse');
+        spawnFloatingText(tx, ty, "+500", "#94a3b8");
     }
     else if (game.catnip && tx === game.catnip.x && ty === game.catnip.y) {
         game.score += 1000; game.catnip = null;
         playSound('catnip');
-        window.activateTurbo(); 
+        spawnFloatingText(tx, ty, "+1000", "#22c55e");
+        window.activateTurbo();
     }
 
     // Move Body
     game.snake.forEach(seg => { seg.px = seg.x; seg.py = seg.y; });
     for (let i = game.snake.length - 1; i >= 1; i--) {
-        game.snake[i].x = game.snake[i-1].x;
-        game.snake[i].y = game.snake[i-1].y;
+        game.snake[i].x = game.snake[i - 1].x;
+        game.snake[i].y = game.snake[i - 1].y;
     }
     game.snake[0].x = tx;
     game.snake[0].y = ty;
@@ -326,8 +333,8 @@ function updateGameLogic() {
     if (game.dog && !game.arfHead) {
         const dx = Math.abs(game.snake[0].x - game.dog.x);
         const dy = Math.abs(game.snake[0].y - game.dog.y);
-        if ((dx <= 1 && dy <= 1) && (dx+dy !== 0)) { // 1-cell radius including diagonals
-             game.shouldAnimateArf = true;
+        if ((dx <= 1 && dy <= 1) && (dx + dy !== 0)) { // 1-cell radius including diagonals
+            game.shouldAnimateArf = true;
         }
     }
 
@@ -340,11 +347,11 @@ function updateGameLogic() {
             const rem = Math.min(game.snake.length - 3, 3);
             game.snake.length -= rem;
         }
-    } 
-    
+    }
+
     // Animations
     if (game.shouldAnimateSleep) {
-        animateSleep(game.snake[0]); 
+        animateSleep(game.snake[0]);
         game.shouldAnimateSleep = false;
     }
     if (game.shouldAnimateArf) {
@@ -357,7 +364,21 @@ function updateGameLogic() {
         localStorage.setItem('catSnakeHighScore', game.highScore);
     }
 
-    game.nextHeadPos = null; 
+    game.nextHeadPos = null;
     window.checkLevelUp();
     updateUI(); // Update UI after game logic, including score changes
+}
+
+function spawnFloatingText(x, y, text, color) {
+    if (game.paused || game.gameOver) return;
+
+    game.floatingTexts.push({
+        x: x,
+        y: y, // Starts at the cell's center position (renderer handles conversion)
+        text: text,
+        color: color,
+        offsetY: 0,
+        alpha: 1.0,
+        startTime: performance.now()
+    });
 }

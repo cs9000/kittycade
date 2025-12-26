@@ -40,6 +40,44 @@ function createLitterTexture() {
 }
 
 
+
+function drawFloatingTexts(ctx, renderDeltaTime) {
+    if (game.floatingTexts.length === 0) return;
+
+    const FLOAT_SPEED = 50; // px per second upward
+    const FADE_SPEED = 1.0; // alpha per second
+
+    game.floatingTexts.forEach(ft => {
+        // Move straight up
+        ft.offsetY -= FLOAT_SPEED * renderDeltaTime;
+
+        // Fade out
+        ft.alpha -= FADE_SPEED * renderDeltaTime;
+    });
+
+    // Remove expired texts
+    game.floatingTexts = game.floatingTexts.filter(ft => ft.alpha > 0);
+
+    ctx.save();
+    ctx.font = 'bold 24px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.5)';
+    ctx.shadowBlur = 2;
+
+    game.floatingTexts.forEach(ft => {
+        const cx = (ft.x + 0.5) * CELL_SIZE;
+        const cy = (ft.y + 0.5) * CELL_SIZE;
+
+        ctx.globalAlpha = Math.max(0, ft.alpha);
+        ctx.fillStyle = ft.color;
+        // Text floats "straight up"
+        ctx.fillText(ft.text, cx, cy + ft.offsetY);
+    });
+
+    ctx.restore();
+}
+
 function drawLitterBoxGraphic(ctx, X, Y, W, H, isLegend) {
     ctx.save();
     const boxX = X;
@@ -183,6 +221,8 @@ function draw(interpolationFactor, renderDeltaTime) {
     if (game.arfHead) {
         drawArfAnimation(ctx, renderDeltaTime);
     }
+
+    drawFloatingTexts(ctx, renderDeltaTime);
 
     if (game.feedbackMessage) {
         drawFeedback(ctx, performance.now());
